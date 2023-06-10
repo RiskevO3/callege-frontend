@@ -60,7 +60,7 @@
             </li>
             <li>
               <RouterLink
-                :to="isAuth ? '/dashboard/streaming' : '/login'"
+                :to="isAuth ? '/dashboard' : '/login'"
                 class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:bg-primary md:px-7 md:py-2 md:text-white md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105"
               >
                 {{ isAuth ? 'Dashboard' : 'Login' }}
@@ -130,12 +130,18 @@
 </template>
 <script>
 import { RouterLink } from 'vue-router'
+import { h } from 'vue'
 import { useCallegeStore } from '../stores/callege'
-import { ElMessageBox, ElNotification } from 'element-plus'
+import { ElMessageBox, ElNotification,ElLoading } from 'element-plus'
 export default {
   name: 'navBar',
   components: {
     RouterLink
+  },
+  data(){
+    return{
+      loading:null
+    }
   },
   computed: {
     isOnLanding() {
@@ -166,27 +172,40 @@ export default {
     }
     )
       .then(async ()=>{
+        this.loading = ElLoading.service({
+          lock: true,
+          text: 'Loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         let res = await useCallegeStore().logoutUser()
         if(res){
         this.$router.replace('/')
         ElNotification({
           title: 'Success',
-          message: 'Logout Berhasil!',
+          message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Logout Berhasil!'),
           type: 'success',
         })
+        if(this.loading){
+          this.loading.close()
+          this.loading = null
+        }
       }
       else{
         ElNotification({
           title: 'Error',
-          message: 'Logout Gagal!',
+          message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Logout Gagal!'),
           type: 'error',
         })
+        if(this.loading){
+          this.loading.close()
+          this.loading = null
+        }
       }
       })
       .catch(()=>{
         ElNotification({
           title: 'Info',
-          message: 'anda tidak jadi logout',
+          message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'anda tidak jadi logout'),
           type: 'info',
         })
       })

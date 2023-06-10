@@ -13,18 +13,23 @@
                             <p class="text-lg font-bold text-gray-900 truncate dark:text-white">
                                 {{ useCallegeStore().name  }}
                             </p>
-                            <p class="text-lg text-gray-500 truncate dark:text-gray-400">
-                                Free User
+                            <p class="text-md text-gray-500 truncate dark:text-gray-400 font-semibold">
+                                Premium User
+                                <p class="text-sm">Active untill : 25-03-2023</p>
                             </p>
                         </div>
                         <div class="items-center text-base font-semibold text-gray-900 dark:text-white">
-                            <button type="button"
-                                class="transition-all text-white bg-[#F45050] hover:bg-[#DC4848] focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2 ">Langganan</button>
+                            <button 
+                                class="transition-all text-white bg-[#F45050] hover:bg-[#DC4848] focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2 "
+                                @click="openSubscribe"
+                                >
+                                Langganan
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="mt-8">
-                    <form method="POST" action="#">
+                    <div>
                         <div class="grid gap-y-8 gap-x-10 mb-6 md:grid-cols-2">
                             <div>
                                 <label for="nama_panggilan"
@@ -32,7 +37,7 @@
                                     Panggilan</label>
                                 <input type="text" id="nama_panggilan" name="nama_panggilan"
                                     class="bg-white border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
-                                    placeholder="ex. Wage" :value="useCallegeStore().name.split(' ')[0]" required>
+                                    placeholder="ex. Wage" v-model="nama_panggilan" required>
                             </div>
                             <div>
                                 <label for="nama_lengkap"
@@ -58,7 +63,7 @@
                                     Telepon</label>
                                 <input type="number" id="phone" name="phone" pattern="[0-9]*" inputmode="numeric"
                                     class="bg-white border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
-                                    placeholder="ex. 0822 4690 5357" value="" required>
+                                    placeholder="ex. 0822 4690 5357" v-model.number="phone" required>
 
                             </div>
                             <div>
@@ -77,15 +82,184 @@
                             </div>
                         </div>
                         <div class="flex justify-center mt-12">
-                            <button id="save" type="submit"
-                                class="transition-all text-white bg-[#7868E6] hover:bg-[#6C5ECF] focus:ring-4 focus:outline-none focus:ring-[#D5D0F7] font-medium rounded-xl text-lg w-full sm:w-auto px-8 py-3 text-center">Simpan
-                                Perubahan</button>
+                            <button
+                                type="button"
+                                class="transition-all text-white bg-[#7868E6] hover:bg-[#6C5ECF] focus:ring-4 focus:outline-none focus:ring-[#D5D0F7] font-medium rounded-xl text-lg w-full sm:w-auto px-8 py-3 text-center disabled:opacity-75"
+                                @click="updateProfile"
+                                :disabled="!phone"
+                                >
+                                Simpan Perubahan
+                            </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
 </template>
 <script setup>
 import { useCallegeStore } from '../stores/callege';
+import { ElMessageBox,ElNotification,ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+let nama_panggilan = useCallegeStore().shortName
+let phone = useCallegeStore().phone
+const updateProfile = () => {
+            if(nama_panggilan.length > 0 && phone){
+                ElMessageBox.confirm(
+                'Anda akan merubah informasi akun, lanjutkan?',
+                'Warning',
+                {
+                    confirmButtonText: 'Lanjutkan',
+                    cancelButtonText: 'Batalkan',
+                    type: 'warning',
+                    center: true,
+                }
+            )
+            .then(async ()=>{
+                useCallegeStore().shortName = nama_panggilan
+                useCallegeStore().phone = phone
+                let res = await useCallegeStore().updateUser();
+                if(res){
+                    router.push({name:'streaming'})
+                    ElNotification({
+                        title:'Berhasil!',
+                        message:'Berhasil mengubah profile',
+                        type:'success'
+                    })
+                }
+                else{
+
+                    ElNotification({
+                        title:'Gagal!',
+                        message:'Gagal mengubah profile',
+                        type:'error'
+                    })
+                }
+            })
+            .catch((err)=>{
+                console.log(err)
+                ElNotification({
+                    title:'Info',
+                    message:'Perubahan dibatalkan',
+                    type:'info'
+                })
+            })
+            }
+            else{
+                ElNotification({
+                    title:'Info',
+                    message:'Harap isi seluruh data yang diperlukan',
+                    type:'info'
+                })
+            }
+}
+const openSubscribe = () => {
+  ElMessageBox.prompt('Please input your e-mail', 'Konfirmasi Langganan', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputType:'number',
+    inputValue:0,
+    inputValidator: (val) => {
+        if(val > 0){
+            return true
+        }
+        else{
+            return 'Harap masukkan jumlah bulan langganan lebih dari 0'
+        }
+    }
+  })
+    .then(({ value }) => {
+      let totalBulan = parseInt(value)
+      if(parseInt(totalBulan) > 0){
+        ElMessage.success({
+        message: `anda akan mensubscribe ${totalBulan} bulan`,
+      })
+      useCallegeStore().subscribeTime = totalBulan
+      router.push({name:'subscribe'})
+      }
+      else{
+        ElMessage.error({
+        message: 'tidak bisa mensubscribe kurang dari 1 bulan',
+      })
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      })
+    })
+}
 </script>
+<!-- <script>
+import { useCallegeStore } from '../stores/callege';
+import { ElMessageBox, ElNotification } from 'element-plus';
+import { RouterLink } from 'vue-router';
+export default{
+    name:'ProfileView',
+    setup(){
+        return {useCallegeStore}
+    },
+    data(){
+        return{
+            nama_panggilan:useCallegeStore().shortName,
+            phone:useCallegeStore().phone,
+            
+        }
+    },
+    components:{
+        RouterLink
+    },
+    methods:{
+        updateProfile(){
+            if(this.nama_panggilan.length > 0 && this.phone){
+                ElMessageBox.confirm(
+                'Anda akan merubah informasi akun, lanjutkan?',
+                'Warning',
+                {
+                    confirmButtonText: 'Lanjutkan',
+                    cancelButtonText: 'Batalkan',
+                    type: 'warning',
+                    center: true,
+                }
+            )
+            .then(async ()=>{
+                useCallegeStore().shortName = this.nama_panggilan
+                useCallegeStore().phone = this.phone
+                let res = await useCallegeStore().updateUser();
+                if(res){
+                    this.$router.push({name:'streaming'})
+                    ElNotification({
+                        title:'Berhasil!',
+                        message:'Berhasil mengubah profile',
+                        type:'success'
+                    })
+                }
+                else{
+
+                    ElNotification({
+                        title:'Gagal!',
+                        message:'Gagal mengubah profile',
+                        type:'error'
+                    })
+                }
+            })
+            .catch(()=>{
+                ElNotification({
+                    title:'Info',
+                    message:'Perubahan dibatalkan',
+                    type:'info'
+                })
+            })
+            }
+            else{
+                ElNotification({
+                    title:'Info',
+                    message:'Harap isi seluruh data yang diperlukan',
+                    type:'info'
+                })
+            }
+        }
+    }
+}
+</script> -->

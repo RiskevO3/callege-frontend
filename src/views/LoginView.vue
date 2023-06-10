@@ -26,7 +26,7 @@
         <div class="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8" style="background-color: #f2f0fd">
             <div class="flex justify-end items-center mb-14">
-              <h1 class="text-sm ml-4 pr-2">{{ isLogin ? 'Belum' : 'Sudah' }} punya akun?</h1>
+              <h1 class="text-sm ml-4 pr-2"><b>{{ isLogin ? 'Belum' : 'Sudah' }} punya akun?</b></h1>
               <div>
                 <button
                   class="bg-primary text-white px-7 py-3 rounded-full hover:bg-sub transition delay-100"
@@ -76,14 +76,16 @@
   </div>
 </template>
 <script>
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification,ElLoading } from 'element-plus'
+import { h } from 'vue'
 import { useCallegeStore } from '../stores/callege'
+import { googleAuthCodeLogin } from 'vue3-google-login'
 export default {
   name: 'LoginView',
   data() {
     return {
       login: false,
-      tabs: null
+      loading:null
     }
   },
   computed: {
@@ -101,19 +103,51 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       })
-        .then(async () => {
-            let res = await useCallegeStore().getLoginUrl()
-            console.log(res)
-            if(res){
-              console.log('mulai emit')
-              try{
-                this.$socket.emit('requestUrl',{'token':res})
+        .then(() => {
+          this.loading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+          googleAuthCodeLogin().then(async (response) => {
+            let res = await useCallegeStore().loginUser(response['code'])
+            if (res) {
+              let auth = await useCallegeStore().authUser()
+              if (auth) {
+                this.$router.push({ name: 'profile' })
+                ElNotification({
+                  title: 'Success',
+                  message:h('p', { style: 'color:black;font-weight:bold;letter-spacing: 1px;' }, `Selamat Datang ${res['name']}!`),
+                  type: 'success'
+                })
+                if(this.loading){
+                  this.loading.close()
+                  this.loading = null
+                }
+              } else {
+                ElNotification({
+                  title: 'Error',
+                  message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Autentikasi Gagal!'),
+                  type: 'error'
+                })
+                if(this.loading){
+                  this.loading.close()
+                  this.loading = null
+                }
               }
-              catch(err){
-                console.log(err)
-              }
-              console.log('hasil request')
+            } 
+            else {
+              ElNotification({
+                title: 'Error',
+                message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' },'Login Gagal!'),
+                type: 'error'
+              })
+              if(this.loading){
+                  this.loading.close()
+                  this.loading = null
+                }
             }
+          })
         })
         .catch(() => {
           ElMessage({
@@ -122,45 +156,105 @@ export default {
           })
         })
     }
-  },
-  sockets:{
-    requestUrlResponse(msg){
-      if(msg['url']){
-        this.tabs = window.open(msg['url'])
-      }
-      else{
-        console.log(msg)
-      }
-    },
-    async loginStatus(msg){
-      try{
-        console.log(msg)
-      if(msg['success']){
-        useCallegeStore().tokenSess = msg['data']['token']
-        localStorage.setItem('tokenSess',msg['data']['token'])
-        await useCallegeStore().authUser();
-        this.tabs.close()
-        this.tabs = null
-        this.$router.push({name:'profile'})
-        ElNotification({
-          title: 'Success',
-          message: `Selamat Datang ${msg['data']['name']}!`,
-          type: 'success',
-        })
-      }
-      else{
-        this.tab.close()
-        ElNotification({
-          title: 'Error',
-          message: 'Login Gagal!',
-          type: 'error',
-        })
-      }
-      }
-      catch(err){
-        console.log(err)
-      }
-    }
   }
 }
+
+// login yang lama
+// login yang lama dibawah
+// Login() {
+//   ElMessageBox.confirm('Anda akan dialihkan kehalaman google, lanjutkan?', 'Warning', {
+//     confirmButtonText: 'Lanjutkan',
+//     cancelButtonText: 'Cancel',
+//     type: 'warning'
+//   })
+//     .then(async () => {
+//         let res = await useCallegeStore().getLoginUrl()
+//         console.log(res)
+//         if(res){
+//           console.log('mulai emit')
+//           try{
+//             this.$socket.emit('requestUrl',{'token':res})
+//           }
+//           catch(err){
+//             console.log(err)
+//           }
+//           console.log('hasil request')
+//         }
+//     })
+//     .catch(() => {
+//       ElMessage({
+//         type: 'info',
+//         message: 'Cancel'
+//       })
+//     })
+// }
+// ====
+// sockets
+// sockets:{
+//   requestUrlResponse(msg){
+//     if(msg['url']){
+//       console.log(msg['url'],'tabel')
+//       this.tabel = window.open(msg['url'])
+//     }
+//     else{
+//       console.log(msg)
+//     }
+//   },
+//   async loginStatus(msg){
+//     try{
+//       console.log(msg)
+//       console.log('gamuncul meki')
+//       console.log(this.tabel)
+//     if(msg['success']){
+//       useCallegeStore().tokenSess = msg['data']['token']
+//       localStorage.setItem('tokenSess',msg['data']['token'])
+//       await useCallegeStore().authUser();
+//       if(this.tabel){
+//         try{
+//           this.tabel.close()
+//         }
+//         catch{
+//           ElNotification({
+//             title: 'Error',
+//             message: 'Login Gagal!',
+//             type: 'error',
+//           })
+//         }
+//       }
+//       this.$router.push({name:'profile'})
+//       ElNotification({
+//         title: 'Success',
+//         message: `Selamat Datang ${msg['data']['name']}!`,
+//         type: 'success',
+//       })
+//     }
+//     else{
+//       console.log("masuk kesini")
+//       await useCallegeStore().authUser()
+//       if(this.tabel){
+//         console.log(this.tabel)
+//         try{
+//           this.tabel.close()
+//         }
+//         catch{
+//           ElNotification({
+//             title: 'Error',
+//             message: 'Login Gagal!',
+//             type: 'error',
+//           })
+//         }
+//       }
+//       this.$router.push({name:'login'})
+//       ElNotification({
+//         title: 'Error',
+//         message: 'Login Gagal!',
+//         type: 'error',
+//       })
+//     }
+//     }
+//     catch(err){
+//       console.log(err)
+//     }
+//   }
+// }
 </script>

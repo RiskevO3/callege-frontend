@@ -2,51 +2,114 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 export const useCallegeStore = defineStore('videochat', {
   state: () => ({
-    // roomSession:null,
+    routeHistory:localStorage.getItem('routeHistory') ? localStorage.getItem('routeHistory') : null,    
     sessionId: null,
-    token: null,
+    roomToken: null,
     tokenSess: localStorage.getItem('tokenSess') ? localStorage.getItem('tokenSess') : null,
     roomName: null,
     name: null,
+    shortName:null,
     picture: null,
+    phone:null,
     jurusan: null,
     universitas:null,
     email:null,
     isVerif:null,
+    subscribeTime:null,
     ngrokUrl: 'http://127.0.0.1:5001'
   }),
   actions: {
+    setRouteHistory(route){
+      this.routeHistory = route
+      localStorage.setItem('routeHistory',route)
+    },
+    async loginUser(code){
+      let res = await axios.post(`${this.ngrokUrl}/googlelogin`,{
+        code:code
+      })
+      console.log(res.data)
+      console.log(res.data.success)
+      if(res.data.success){
+        console.log('masuk sini broo')
+        this.tokenSess = res.data.data.token
+        localStorage.setItem('tokenSess',this.tokenSess)
+        return res.data.data
+      }
+      else{
+        false
+      }
+    },
+    async updateUser(){
+      let res = await axios.post(`${this.ngrokUrl}/updateaccount`,{
+        token:this.tokenSess,
+        shortName:this.shortName,
+        phone:`0${this.phone}`,
+      })
+      if(res.data.success){
+        return true
+      }
+      else{
+        return false
+      }
+    },
     async authUser() {
       if (this.tokenSess) {
         console.log('masuk kesini')
         console.log(this.tokenSess)
-        await axios
-          .post(`${this.ngrokUrl}/auth`, {
-            token: this.tokenSess
-          })
-          .then((response) => {
-            if (response.data.success) {
-              this.isVerif = response.data.verified_account
-              this.sessionId = response.data.session_id
-              this.name = response.data.name
-              this.picture = response.data.picture
-              this.email = response.data.email
-              this.jurusan = response.data.jurusan
-              this.universitas = response.data.universitas
-              console.log('auth success')
-            } else {
-              this.tokenSess = null
-              console.log('auth failed')
-              localStorage.removeItem('tokenSess')
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-            this.tokenSess = null
-            localStorage.removeItem('tokenSess')
-          })
-      } else {
+        let response = await axios.post(`${this.ngrokUrl}/auth`,{
+          token:this.tokenSess
+        })
+        if (response.data.success) {
+          this.isVerif = response.data.verified_account
+          this.sessionId = response.data.session_id
+          this.name = response.data.name
+          this.shortName = response.data.short_name
+          this.picture = response.data.picture
+          this.email = response.data.email
+          this.jurusan = response.data.jurusan
+          this.universitas = response.data.universitas
+          this.phone = response.data.phone
+          console.log('auth success')
+          return true
+        }
+        else {
+          this.tokenSess = null
+          console.log('auth failed')
+          localStorage.removeItem('tokenSess')
+          return false
+        }
+        // await axios
+        //   .post(`${this.ngrokUrl}/auth`, {
+        //     token: this.tokenSess
+        //   })
+        //   .then((response) => {
+        //     if (response.data.success) {
+        //       this.isVerif = response.data.verified_account
+        //       this.sessionId = response.data.session_id
+        //       this.name = response.data.name
+        //       this.shortName = response.data.short_name
+        //       this.picture = response.data.picture
+        //       this.email = response.data.email
+        //       this.jurusan = response.data.jurusan
+        //       this.universitas = response.data.universitas
+        //       this.phone = response.data.phone
+        //       console.log(this.phone)
+        //       console.log('auth success')
+        //     } else {
+        //       this.tokenSess = null
+        //       console.log('auth failed')
+        //       localStorage.removeItem('tokenSess')
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.log(error)
+        //     this.tokenSess = null
+        //     localStorage.removeItem('tokenSess')
+        //   })
+      } 
+      else {
         console.log('blum login')
+        return false
       }
     },
     async logoutUser() {
@@ -57,7 +120,7 @@ export const useCallegeStore = defineStore('videochat', {
         this.tokenSess = null
         localStorage.removeItem('tokenSess')
         this.sessionId = null
-        this.token = null
+        this.roomToken = null
         this.roomName = null
         this.name = null
         this.picture = null
@@ -88,7 +151,7 @@ export const useCallegeStore = defineStore('videochat', {
     },
     async getRoomToken() {
       console.log('start token')
-      if (!this.token) {
+      if (!this.roomToken) {
         await axios
           .post(`${this.ngrokUrl}/generatetoken`, {
             headers: { 'ngrok-skip-browser-warning': true },
@@ -96,7 +159,7 @@ export const useCallegeStore = defineStore('videochat', {
           })
           .then((response) => {
             if (response.data.success) {
-              this.token = response.data.token
+              this.roomToken = response.data.token
               this.roomName = response.data.room_name
               console.log(response.data.token)
             } else {
@@ -127,7 +190,7 @@ export const useCallegeStore = defineStore('videochat', {
         })
         .then((response) => {
           if (response.data.success) {
-            this.token = null
+            this.roomToken = null
             console.log('session ended')
           } else {
             console.log('gagal end session')
@@ -135,7 +198,7 @@ export const useCallegeStore = defineStore('videochat', {
         })
     },
     async leaveWebsite() {
-      if (this.token) {
+      if (this.roomToken) {
         await axios
           .post(`${this.ngrokUrl}/endcall`, {
             headers: { 'ngrok-skip-browser-warning': true },
@@ -144,12 +207,15 @@ export const useCallegeStore = defineStore('videochat', {
           })
           .then((response) => {
             if (response.data.success) {
-              this.token = null
+              this.roomToken = null
               console.log('session ended')
             } else {
               console.log('gagal end session')
             }
           })
+      }
+      else{
+        console.log('there isnt call to end')
       }
     }
   }

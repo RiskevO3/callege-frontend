@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElNotification } from 'element-plus'
+import { h } from 'vue'
 import {useCallegeStore} from '../stores/callege.js'
 import NProgress from 'nprogress';
 import HomeView from '../views/HomeView.vue'
@@ -8,6 +9,7 @@ import ProfileView from '../views/ProfileView.vue'
 import FaqView from '../views/FaqView.vue'
 import AboutView from '../views/AboutView.vue'
 import StreamingView from '../views/StreamingView.vue'
+import LanggananView from '../views/LanggananView.vue'
 const routes = [
   {
     path: '/',
@@ -17,7 +19,17 @@ const routes = [
   {
     path:'/login',
     name:'login',
-    component: LoginView
+    component: LoginView,
+    beforeEnter:(to,from,next)=>{
+      if(to.name == 'login'){
+        if(useCallegeStore().sessionId){
+          next({name:'dashboard'})
+        }
+        else{
+          next()
+        }
+      }
+    }
   },
   {
     path:'/dashboard',
@@ -27,34 +39,23 @@ const routes = [
       if(to.name == 'dashboard'){
         next('/dashboard/profile')
       }
-      if(useCallegeStore().sessionId){
-        if(to.name != 'profile'){
-          if(useCallegeStore().isVerif){
-            next()
-          }
-          else{
-            ElNotification({
-              title:'Info',
-              message:'Harap konfirmasi nomor telfon dan juga nama panggilan terlebih dahulu!',
-              type:'warning'
-            })
-            next({name:'profile'})
-          }
+      else if(to.name != 'dashboard'){
+        if(useCallegeStore().sessionId){
+          next()
         }
+        else{
+          ElNotification({
+            title:'Error',
+            message:'U need to login first!',
+            type:'error'
+          })
+          next({name:'login'})
+        }
+      }
       else{
         next()
       }
-      }
-      else{
-        ElNotification({
-          title:'Error',
-          message:'You are not logged in',
-          type:'error'
-        })
-        next('/')
-      }
-    }
-    ,
+    },
     children:[
       {
         path:'profile',
@@ -75,6 +76,11 @@ const routes = [
         path:'streaming',
         name:'streaming',
         component:StreamingView
+      },
+      {
+        path:'subscribe',
+        name:'subscribe',
+        component:LanggananView
       }
     ]
   }
@@ -92,7 +98,6 @@ const checkAvailableRoute = (destination, routes) => {
       return true;
     }
     if (route.children && route.children.length > 0) {
-      console.log(route.children)
       const childResult = checkAvailableRoute(destination, route.children);
       if (childResult) {
         return true;
@@ -111,18 +116,40 @@ router.beforeResolve((to, from, next) => {
   next()
 })
 
+const routeDashboard = ['faq','about','streaming']
 router.beforeEach(async (to, from, next) => {
   await useCallegeStore().authUser()
   if(checkAvailableRoute(to.name,routes)){
-    next()
+    useCallegeStore().setRouteHistory(to.name)
+    if(routeDashboard.includes(to.name)){
+      if(useCallegeStore().isVerif){
+        next()
+      }
+      else{
+        ElNotification({
+          title:'Perhatian',
+          message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
+          type:'warning'
+        })
+        next({name:'profile'})
+      }
+    }
+    else{
+      next()
+    }
   }
   else{
     ElNotification({
       title:'Error',
-      message:'Page not found',
+      message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Page not found!'),
       type:'error'
     })
-    next('/')
+    if(useCallegeStore().routeHistory){
+      next({name:useCallegeStore().routeHistory})
+    }
+    else{
+      next('/')
+    }
   }
 })
 

@@ -20,7 +20,7 @@
         </div>
         <div class="flex flex-col pt-[50px]">
             <h1 class="font-bold text-2xl pb-[30px]">Our Team</h1>
-            <p class="text-lg text-justify pb-[20px]">Business Analyst : Rivan Fadilah <br>
+            <p class="text-lg text-justify pb-[20px]">Business Analyst : Rivan Fauzan <br>
                 Product Designer : Herlin Priatna <br>
                 Software Engineer : <br>
                 1. Hamdan Azani <br>
