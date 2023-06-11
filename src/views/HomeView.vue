@@ -282,7 +282,7 @@
   </section>
   <div class="flex justify-center items-center p-2 gap-5 absolute w-full h-12 bg-[#D5D0F7]">
         <p class="text-[#2A2451]">
-            Fantastic Five for Hackathon Proclub <img src="../assets/resource/images/landing/ellipse.png" alt=""
+            Fantastic Five for Hackathon Proclub <img src="../assets/resource/images/landing/Ellipse.png" alt=""
                 class="inline">
             2023
         </p>
