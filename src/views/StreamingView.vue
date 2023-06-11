@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     handleBeforeUnload() {
-      console.log('run here')
+      // console.log('run here')
       useCallegeStore().leaveWebsite()
     },
     async startLocalCam() {
@@ -164,7 +164,7 @@ export default {
         text:'Loading...',
         background:'rgba(0,0,0,0.7)'
       })
-      console.log(this.callEnded)
+      // console.log(this.callEnded)
       if(!this.callEnded){
         this.elementLoadingText = 'Leaving Room...'
         this.eleementloadingPartner = true
@@ -174,12 +174,12 @@ export default {
           toRaw(this.activeRoom).disconnect()
         }
         catch{
-          console.log('error')
+          // console.log('error')
         }
         if(useCallegeStore().roomToken){
           this.$socket.emit('leaveRoom',{room_session:useCallegeStore().roomName})
           await useCallegeStore().leaveWebsite()
-          console.log('masuk ketoken mekk')
+          // console.log('masuk ketoken mekk')
           this.callEnded = true
         }
       }
@@ -214,12 +214,12 @@ export default {
           text: 'Loading',
           background: 'rgba(0, 0, 0, 0.7)',
         });
-        console.log('kesini')
+        // console.log('kesini')
         try{
           await toRaw(this.activeRoom).disconnect();
         }
         catch(error){
-          console.log(error)
+          // console.log(error)
         }
         const mediaContainer = this.$refs.remoteVideo
         mediaContainer.innerHTML = ''
@@ -235,7 +235,7 @@ export default {
         })
       }
       else{
-        console.log('call not yet start')
+        // console.log('call not yet start')
       }
     },
     startVideoChat() {
@@ -260,7 +260,7 @@ export default {
             }
           })
           participant.on('trackSubscribed', (track) => {
-            console.log('track subscribed')
+            // console.log('track subscribed')
             this.loadingPartner = this.loadingPartner ? false : false
             if(!document.querySelector('.el-notification--success')){
                 ElNotification.success({
@@ -273,7 +273,7 @@ export default {
         })
         room.on('participantConnected', (participant) => {
           mediaContainer.innerHTML = ''
-          console.log('participant connected')
+          // console.log('participant connected')
           const div = document.createElement('div')
           div.classList.add('video-container')
           div.id = participant.sid
@@ -295,13 +295,13 @@ export default {
             }
             // this.loadingToast = null
             // }
-            console.log('track subscribed')
+            // console.log('track subscribed')
             div.appendChild(track.attach())
           })
         })
         room.on('disconnected', (room) => {
           // Detach the local media elements
-          console.log('disconected')
+          // console.log('disconected')
           this.messages = []
           room.localParticipant.tracks.forEach((publication) => {
             publication.track.stop() // stop all tracks
@@ -311,7 +311,7 @@ export default {
           // this.activeRoom = null
         })
         room.on('participantDisconnected', (participant) => {
-          console.log('participant disconnected.')
+          // console.log('participant disconnected.')
           // this.activeRoom = null
           const mediaContainer = this.$refs.remoteVideo
           mediaContainer.innerHTML = ''
@@ -324,12 +324,12 @@ export default {
       toRaw(this.activeRoom).localParticipant.audioTracks.forEach((track)=>{
         if(!this.isAudioMuted){
           track.track.disable();
-          console.log(track.track)
+          // console.log(track.track)
           this.isAudioMuted = true
         }
         else{
           track.track.enable();
-          console.log(track.track)
+          // console.log(track.track)
           this.isAudioMuted = false
         }
       })
@@ -353,13 +353,13 @@ export default {
     joinRoomStatus(msg) {
       this.elementLoadingText = 'Mencari partner...'
       this.loadingPartner = true
-      console.log(msg)
+      // console.log(msg)
     },
     leaveRoomStatus(msg) {
-      console.log(msg)
+      // console.log(msg)
     },
     message(msg) {
-      console.log(msg)
+      // console.log(msg)
       if (msg['from'] != useCallegeStore().sessionId) {
         const message = {
           id: Date.now(),
@@ -370,13 +370,13 @@ export default {
       }
     },
     getNewToken(msg) {
-      console.log('ini dari getnewtoken')
+      // console.log('ini dari getnewtoken')
       if (msg['sessionId'] == useCallegeStore().sessionId) {
         this.elementLoadingText = 'Mencari partner...'
         this.loadingPartner = true
         useCallegeStore().roomToken = msg['token']
         useCallegeStore().roomName = msg['room']
-        console.log(msg['room'], 'ini roomnya')
+        // console.log(msg['room'], 'ini roomnya')
         this.$socket.emit('joinRoom', { room_session: useCallegeStore().roomName })
         const mediaContainer = this.$refs.remoteVideo
         mediaContainer.innerHTML = ''

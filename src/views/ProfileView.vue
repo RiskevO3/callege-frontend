@@ -166,7 +166,7 @@ const updateProfile = () => {
                 }
             })
             .catch((err)=>{
-                console.log(err)
+                // console.log(err)
                 ElNotification({
                     title:'Info',
                     message:'Perubahan dibatalkan',

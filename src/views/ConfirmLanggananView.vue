@@ -165,21 +165,6 @@
     </div>
   </div>
 </template>
-<!-- <script setup>
-import { ref,computed,toRaw } from 'vue';
-import { RouterLink } from 'vue-router';
-import { useCallegeStore } from '../stores/callege';
-let totalPayment = ref(useCallegeStore().totalSubscribePrice)
-let totalBulan = ref(useCallegeStore().subscribeTime)
-let totalDuration = ref(useCallegeStore().subscribeDuration)
-let selected = ref('bni')
-let select = computed(selected)
-const selectpayment = (val) =>{
-    console.log(selected)
-    toRaw(selected) = val
-    console.log(selected)
-}
-</script> -->
 <script>
 import { useCallegeStore } from '../stores/callege'
 import { ElMessageBox, ElNotification } from 'element-plus'
@@ -232,7 +217,7 @@ export default {
                 }
         )
         .then(()=>{
-            console.log(this.select)
+            // console.log(this.select)
             this.onPayment = !this.onPayment
             ElNotification.success({
                 message:'request transaksi berhasil dibuat!, harap selesaikan transaksi yang anda buat.'
@@ -242,3 +227,18 @@ export default {
   }
 }
 </script>
+<!-- <script setup>
+import { ref,computed,toRaw } from 'vue';
+import { RouterLink } from 'vue-router';
+import { useCallegeStore } from '../stores/callege';
+let totalPayment = ref(useCallegeStore().totalSubscribePrice)
+let totalBulan = ref(useCallegeStore().subscribeTime)
+let totalDuration = ref(useCallegeStore().subscribeDuration)
+let selected = ref('bni')
+let select = computed(selected)
+const selectpayment = (val) =>{
+    console.log(selected)
+    toRaw(selected) = val
+    console.log(selected)
+}
+</script> -->

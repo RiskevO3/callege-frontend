@@ -225,7 +225,7 @@ export default {
         })
         let response = await useCallegeStore().checkPromoCode(this.promoCode)
         if (response) {
-          console.log(response)
+          // console.log(response)
           ElNotification.success({
             message: 'Kode promo benar!'
           })

@@ -32,10 +32,10 @@ export const useCallegeStore = defineStore('videochat', {
         let res = await axios.post(`${this.ngrokUrl}/googlelogin`, {
           code: code
         })
-        console.log(res.data)
-        console.log(res.data.success)
+        // console.log(res.data)
+        // console.log(res.data.success)
         if (res.data.success) {
-          console.log('masuk sini broo')
+          // console.log('masuk sini broo')
           this.tokenSess = res.data.data.token
           localStorage.setItem('tokenSess', this.tokenSess)
           return res.data.data
@@ -65,8 +65,8 @@ export const useCallegeStore = defineStore('videochat', {
     async authUser() {
       try {
         if (this.tokenSess) {
-          console.log('masuk kesini')
-          console.log(this.tokenSess)
+          // console.log('masuk kesini')
+          // console.log(this.tokenSess)
           let response = await axios.post(`${this.ngrokUrl}/auth`, {
             token: this.tokenSess
           })
@@ -80,16 +80,16 @@ export const useCallegeStore = defineStore('videochat', {
             this.jurusan = response.data.jurusan
             this.universitas = response.data.universitas
             this.phone = response.data.phone
-            console.log('auth success')
+            // console.log('auth success')
             return true
           } else {
             this.tokenSess = null
-            console.log('auth failed')
+            // console.log('auth failed')
             localStorage.removeItem('tokenSess')
             return false
           }
         } else {
-          console.log('blum login')
+          // console.log('blum login')
           return false
         }
       } catch {
@@ -109,7 +109,7 @@ export const useCallegeStore = defineStore('videochat', {
           this.roomName = null
           this.name = null
           this.picture = null
-          console.log('logout success')
+          // console.log('logout success')
           return true
         } else {
           return false
@@ -167,16 +167,16 @@ export const useCallegeStore = defineStore('videochat', {
             .then((response) => {
               if (response.data.success) {
                 this.roomToken = null
-                console.log('session ended')
+                // console.log('session ended')
               } else {
-                console.log('gagal end session')
+                // console.log('gagal end session')
               }
             })
         } else {
-          console.log('there isnt call to end')
+          // console.log('there isnt call to end')
         }
       } catch {
-        console.log('error end call')
+        // console.log('error end call')
       }
     },
     async checkPromoCode(code) {
