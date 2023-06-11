@@ -70,7 +70,7 @@
           <div class="overflow-y-auto">
             <!-- Your chat messages go here -->
             <div v-for="(message,index) in messages" :key="index">
-                <b>{{ message.sender }}</b>: {{ message.message }}
+                <b>{{ message.sender }}</b>: {{ message.text }}
             </div>
           </div>
           <!-- Input field -->
@@ -178,23 +178,33 @@ export default {
         }
         if(useCallegeStore().roomToken){
           this.$socket.emit('leaveRoom',{room_session:useCallegeStore().roomName})
-          await useCallegeStore().endCallSession()
+          await useCallegeStore().leaveWebsite()
           console.log('masuk ketoken mekk')
           this.callEnded = true
         }
       }
-      await useCallegeStore().getRoomToken()
+      let response = await useCallegeStore().getRoomToken()
       if(this.loadingScreen){
         this.loadingScreen.close()
       }
+      if(response){
       this.$socket.emit('joinRoom',{room_session:useCallegeStore().roomName})
       ElNotification({
         title:'success!',
         message:'Kamu berhasil connect ke room',
-        type:'info'
+        type:'success'
       })
       this.startVideoChat()
       this.callEnded = false
+      }
+      else{
+        this.callEnded = true
+        ElNotification({
+          title:'error!',
+          message:'Kamu gagal connect ke room',
+          type:'error'
+        })
+      }
     },
     async stopCall(){
       if(!this.callEnded){
@@ -215,7 +225,7 @@ export default {
         mediaContainer.innerHTML = ''
         if (useCallegeStore().roomToken) {
           this.$socket.emit('leaveRoom', { room_session: useCallegeStore().roomName })
-          await useCallegeStore().endCallSession()
+          await useCallegeStore().leaveWebsite()
           this.callEnded = true
         }
         this.loadingScreen.close()
@@ -233,6 +243,7 @@ export default {
         name: useCallegeStore().roomName,
         Tracks: this.localTracks
       }).then((room) => {
+        this.isAudioMuted = false
         const mediaContainer = this.$refs.remoteVideo
         mediaContainer.innerHTML = ''
         this.activeRoom = reactive(room)
@@ -297,11 +308,11 @@ export default {
             const attachedElements = publication.track.detach()
             attachedElements.forEach((element) => element.remove())
           })
-          this.activeRoom = null
+          // this.activeRoom = null
         })
         room.on('participantDisconnected', (participant) => {
           console.log('participant disconnected.')
-          this.activeRoom = null
+          // this.activeRoom = null
           const mediaContainer = this.$refs.remoteVideo
           mediaContainer.innerHTML = ''
           this.elementLoadingText = 'mencari partner...'
@@ -327,9 +338,15 @@ export default {
         this.isVideoStart = !this.isVideoStart
     },
     sendMessage(){
-        let message = {'sender':useCallegeStore().shortName,'message':this.newMessage}
+        let message = {'sender':useCallegeStore().shortName,'text':this.newMessage}
         this.messages.push(message)
         this.newMessage = ''
+        this.$socket.emit('sendmessage', {
+        message: message.text,
+        sessionId: useCallegeStore().sessionId,
+        room: useCallegeStore().roomName,
+        senderName:useCallegeStore().shortName
+      })
     }
   },
   sockets: {
@@ -346,7 +363,7 @@ export default {
       if (msg['from'] != useCallegeStore().sessionId) {
         const message = {
           id: Date.now(),
-          sender: 'Person2',
+          sender: msg['sendername'],
           text: msg['message']
         }
         this.messages.push(message)

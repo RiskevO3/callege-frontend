@@ -95,7 +95,7 @@
                 <span class="navText"> Bantuan</span>
               </RouterLink>
             </li>
-            <li>
+            <!-- <li>
               <RouterLink
                 to="/"
                 class="py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
@@ -103,7 +103,7 @@
                 <i class="fa-solid fa-link iconNav"></i>
                 <span class="navText"> KebijakanPrivasi</span>
               </RouterLink>
-            </li>
+            </li> -->
             <li>
               <RouterLink
                 to="/dashboard/about"
@@ -133,6 +133,7 @@ import { RouterLink } from 'vue-router'
 import { h } from 'vue'
 import { useCallegeStore } from '../stores/callege'
 import { ElMessageBox, ElNotification,ElLoading } from 'element-plus'
+import { googleLogout } from 'vue3-google-login'
 export default {
   name: 'navBar',
   components: {
@@ -179,6 +180,7 @@ export default {
         })
         let res = await useCallegeStore().logoutUser()
         if(res){
+        googleLogout()
         this.$router.replace('/')
         ElNotification({
           title: 'Success',

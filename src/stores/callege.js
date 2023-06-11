@@ -15,7 +15,9 @@ export const useCallegeStore = defineStore('videochat', {
     universitas:null,
     email:null,
     isVerif:null,
-    subscribeTime:null,
+    subscribeTime:2,
+    subscribeDuration:'11 Juli 2023',
+    totalSubscribePrice:200000,
     ngrokUrl: 'http://127.0.0.1:5001'
   }),
   actions: {
@@ -130,72 +132,39 @@ export const useCallegeStore = defineStore('videochat', {
         return false
       }
     },
-    async getSessionId() {
-      console.log('masuk kesini')
-      this.sessionId = localStorage.getItem('sessionId') ? localStorage.getItem('sessionId') : ''
-      await axios
-        .post(`${this.ngrokUrl}/createuser`, {
+    async getRoomToken() {
+      console.log('start token')
+      // if (!this.roomToken) {
+      //   await axios
+      //     .post(`${this.ngrokUrl}/generatetoken`, {
+      //       headers: { 'ngrok-skip-browser-warning': true },
+      //       session_id: this.sessionId
+      //     })
+      //     .then((response) => {
+      //       if (response.data.success) {
+      //         this.roomToken = response.data.token
+      //         this.roomName = response.data.room_name
+      //         console.log(response.data.token)
+      //       } else {
+      //         console.log('gagal generate token')
+      //       }
+      //     })
+      // }
+      if(!this.roomToken){
+        let res = await axios.post(`${this.ngrokUrl}/generatetoken`, {
           headers: { 'ngrok-skip-browser-warning': true },
           session_id: this.sessionId
         })
-        .then((response) => {
-          console.log(response)
-          if (response.data.success) {
-            this.sessionId = response.data.session_id
-            localStorage.setItem('sessionId', this.sessionId)
-            console.log('ur session is:' + this.sessionId)
-          } else {
-            console.log('gagal set session id')
-          }
-        })
-    },
-    async getRoomToken() {
-      console.log('start token')
-      if (!this.roomToken) {
-        await axios
-          .post(`${this.ngrokUrl}/generatetoken`, {
-            headers: { 'ngrok-skip-browser-warning': true },
-            session_id: this.sessionId
-          })
-          .then((response) => {
-            if (response.data.success) {
-              this.roomToken = response.data.token
-              this.roomName = response.data.room_name
-              console.log(response.data.token)
-            } else {
-              console.log('gagal generate token')
-            }
-          })
-      }
-    },
-    async getLoginUrl() {
-      try {
-        const response = await axios.post(`${this.ngrokUrl}/generateloginurl`)
-        console.log(response.data)
-        console.log(response.data.success)
-        if (response.data.success === true) {
-          return response.data.token
+        if(res.data.success){
+          this.roomToken = res.data.token
+          this.roomName = res.data.room_name
+          return true
         }
-      } catch (error) {
-        console.error(error)
-        return false
+        else{
+          return false
+        }
       }
-    },
-    async endCallSession() {
-      await axios
-        .post(`${this.ngrokUrl}/endcall`, {
-          headers: { 'ngrok-skip-browser-warning': true },
-          room_name: this.roomName,
-          user_sess: this.sessionId
-        })
-        .then((response) => {
-          if (response.data.success) {
-            this.roomToken = null
-            console.log('session ended')
-          } else {
-            console.log('gagal end session')
-          }
-        })
+      return false
     },
     async leaveWebsite() {
       if (this.roomToken) {
@@ -217,6 +186,66 @@ export const useCallegeStore = defineStore('videochat', {
       else{
         console.log('there isnt call to end')
       }
-    }
+    },
+    async checkPromoCode(code){
+      let response = await axios.post(`${this.ngrokUrl}/promocodeverification`,{
+        promo_code:code
+      })
+      if(response.data.success){
+        this.totalSubscribePrice = this.totalSubscribePrice - response.data.discount
+        return response.data
+      }
+      else{
+        return false
+      }
+    },
+    // async getSessionId() {
+    //   console.log('masuk kesini')
+    //   this.sessionId = localStorage.getItem('sessionId') ? localStorage.getItem('sessionId') : ''
+    //   await axios
+    //     .post(`${this.ngrokUrl}/createuser`, {
+    //       headers: { 'ngrok-skip-browser-warning': true },
+    //       session_id: this.sessionId
+    //     })
+    //     .then((response) => {
+    //       console.log(response)
+    //       if (response.data.success) {
+    //         this.sessionId = response.data.session_id
+    //         localStorage.setItem('sessionId', this.sessionId)
+    //         console.log('ur session is:' + this.sessionId)
+    //       } else {
+    //         console.log('gagal set session id')
+    //       }
+    //     })
+    // },
+    // async getLoginUrl() {
+    //   try {
+    //     const response = await axios.post(`${this.ngrokUrl}/generateloginurl`)
+    //     console.log(response.data)
+    //     console.log(response.data.success)
+    //     if (response.data.success === true) {
+    //       return response.data.token
+    //     }
+    //   } catch (error) {
+    //     console.error(error)
+    //     return false
+    //   }
+    // },
+    // async endCallSession() {
+    //   await axios
+    //     .post(`${this.ngrokUrl}/endcall`, {
+    //       headers: { 'ngrok-skip-browser-warning': true },
+    //       room_name: this.roomName,
+    //       user_sess: this.sessionId
+    //     })
+    //     .then((response) => {
+    //       if (response.data.success) {
+    //         this.roomToken = null
+    //         console.log('session ended')
+    //       } else {
+    //         console.log('gagal end session')
+    //       }
+    //     })
+    // },
   }
 })

@@ -10,6 +10,7 @@ import FaqView from '../views/FaqView.vue'
 import AboutView from '../views/AboutView.vue'
 import StreamingView from '../views/StreamingView.vue'
 import LanggananView from '../views/LanggananView.vue'
+import ConfirmLanggananView from '../views/ConfirmLanggananView.vue'
 const routes = [
   {
     path: '/',
@@ -41,7 +42,22 @@ const routes = [
       }
       else if(to.name != 'dashboard'){
         if(useCallegeStore().sessionId){
-          next()
+          if(to.name = 'subscribe' || to.name == 'confirmPayment'){
+            if(useCallegeStore().subscribeTime && useCallegeStore().subscribeDuration && useCallegeStore().totalSubscribePrice){
+              next()
+            }
+            else{
+              ElNotification({
+                title:'Error',
+                message:'anda harus membuat request transaksi terlebih dahulu!',
+                type:'error'
+              })
+              next({name:'profile'})
+            }
+          }
+          else{
+            next()
+          }
         }
         else{
           ElNotification({
@@ -81,6 +97,11 @@ const routes = [
         path:'subscribe',
         name:'subscribe',
         component:LanggananView
+      },
+      {
+        path:'confirmpayment',
+        name:'confirmPayment',
+        component:ConfirmLanggananView
       }
     ]
   }
