@@ -152,7 +152,7 @@ router.beforeEach(async (to, from, next) => {
   if(localStorage.getItem('tokenSess') && !from.name){
     loading = ElLoading.service({
       lock: true,
-      background: 'rgba(122, 122, 122, 0.8)',
+      background: 'rgba(0, 0, 0, 0.7)',
     });
     await useCallegeStore().authUser()
     loading.close()
