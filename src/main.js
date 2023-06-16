@@ -19,7 +19,7 @@ app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
 export const socket = new VueSocketIO({
-    connection:'http://127.0.0.1:5001/socket',
+    connection:'https://callege-api-66iaa.ondigitalocean.app/socket',
   })
   app.use(vue3GoogleLogin, {
     clientId: '201867067684-0mogqupejpgnghtnqm095e58mvo6uhul.apps.googleusercontent.com',

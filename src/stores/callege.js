@@ -20,7 +20,7 @@ export const useCallegeStore = defineStore('videochat', {
     subscribeTime: 2,
     subscribeDuration: '11 Juli 2023',
     totalSubscribePrice: 200000,
-    ngrokUrl: 'http://127.0.0.1:5001/'
+    ngrokUrl: 'https://callege-api-66iaa.ondigitalocean.app/'
   }),
   actions: {
     setRouteHistory(route) {
