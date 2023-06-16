@@ -127,7 +127,6 @@ export default {
   async beforeMount(){
     await useCallegeStore().getRoomToken()
     window.addEventListener("beforeunload", this.handleBeforeUnload)
-    console.log('masuk before mount')
   },
   mounted(){
     return new Promise(async(resolve,reject)=>{
@@ -162,7 +161,6 @@ export default {
   },
   methods: {
     async handleBeforeUnload() {
-      // console.log('run here')
       if(this.activeRoom){
         await toRaw(this.activeRoom).disconnect();
       }
@@ -182,7 +180,6 @@ export default {
         text:'Loading...',
         background:'rgba(0,0,0,0.7)'
       })
-      // console.log(this.callEnded)
       if(!this.callEnded){
         this.callEnded = true
         this.elementLoadingText = 'Leaving Room...'
@@ -200,11 +197,9 @@ export default {
           await toRaw(this.activeRoom).disconnect()
         }
         catch{
-          console.log('error discoonect bang')
         }
         if(useCallegeStore().roomToken){
           this.$socket.emit('leaveRoom',{room_session:useCallegeStore().roomName})
-          // console.log('masuk ketoken mekk')
         }
       }
       let response = await useCallegeStore().getRoomSession()
@@ -237,12 +232,10 @@ export default {
           text: 'Loading',
           background: 'rgba(0, 0, 0, 0.7)',
         });
-        // console.log('kesini')
         try{
           await toRaw(this.activeRoom).disconnect();
         }
         catch(error){
-          // console.log(error)
         }
         const mediaContainer = this.$refs.remoteVideo
         let remoteVideo = mediaContainer.getElementsByTagName('video')
@@ -277,7 +270,6 @@ export default {
             // check if participant accepted video and audio access
             if (publication.track) {
               const track = publication.track
-              console.log(toRaw(track))
               mediaContainer.appendChild(track.attach())
             }
           })
@@ -286,7 +278,6 @@ export default {
             this.startCountdown()
             this.isCountdown = true
             }
-            console.log('track subscribed')
             this.callEnded = false
             this.loadingPartner = false
             if(!document.getElementsByTagName('.el-notification--success')){
@@ -299,7 +290,6 @@ export default {
           })
         })
         room.on('participantConnected', (participant) => {
-        console.log('participant connected')
         this.callEnded = false
         if(!this.isCountdown){
           this.startCountdown()
@@ -313,17 +303,14 @@ export default {
         if(remoteAudio.length > 0){
           remoteAudio[0].remove()
         }
-          // console.log('participant connected')
           participant.tracks.forEach((publication) => {
             const track = publication.track
-            console.log(track)
             // check if participant accepted video and audio access
             if (publication.isSubscribed) {
               mediaContainer.appendChild(track.attach())
             }
           })
           participant.on('trackSubscribed', (track) => {
-            console.log('track subscribed')
             if(!this.isCountdown){
             this.startCountdown()
             this.isCountdown = true
@@ -338,13 +325,11 @@ export default {
             }
             // this.loadingToast = null
             // }
-            // console.log('track subscribed')
             mediaContainer.appendChild(track.attach())
           })
         })
         room.on('disconnected', (room) => {
           // Detach the local media elements
-          // console.log('disconected')
           this.messages = []
           room.localParticipant.tracks.forEach((publication) => {
             publication.track.stop() // stop all tracks
@@ -354,7 +339,6 @@ export default {
           // this.activeRoom = null
         })
         room.on('participantDisconnected', (participant) => {
-          // console.log('participant disconnected.')
           // this.activeRoom = null
           let remoteVideo = mediaContainer.getElementsByTagName('video')
           let remoteAudio = mediaContainer.getElementsByTagName('audio')
@@ -373,12 +357,10 @@ export default {
       toRaw(this.activeRoom).localParticipant.audioTracks.forEach((track)=>{
         if(!this.isAudioMuted){
           track.track.disable();
-          // console.log(track.track)
           this.isAudioMuted = true
         }
         else{
           track.track.enable();
-          // console.log(track.track)
           this.isAudioMuted = false
         }
       })
@@ -411,13 +393,10 @@ export default {
     joinRoomStatus(msg) {
       this.elementLoadingText = 'Mencari partner...'
       this.loadingPartner = true
-      // console.log(msg)
     },
     leaveRoomStatus(msg) {
-      // console.log(msg)
     },
     message(msg) {
-      // console.log(msg)
       if (msg['from'] != useCallegeStore().sessionId) {
         const message = {
           id: Date.now(),
@@ -428,13 +407,11 @@ export default {
       }
     },
     getNewToken(msg) {
-      // console.log('ini dari getnewtoken')
       if (msg['sessionId'] == useCallegeStore().sessionId) {
         this.elementLoadingText = 'Mencari partner...'
         this.loadingPartner = true
         useCallegeStore().roomToken = msg['token']
         useCallegeStore().roomName = msg['room']
-        // console.log(msg['room'], 'ini roomnya')
         this.$socket.emit('joinRoom', { room_session: useCallegeStore().roomName })
         let remoteVideo = mediaContainer.getElementsByTagName('video')
         let remoteAudio = mediaContainer.getElementsByTagName('audio')

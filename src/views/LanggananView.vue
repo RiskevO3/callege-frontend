@@ -164,7 +164,6 @@ const cekKode = async () => {
     })
         let response = await useCallegeStore().checkPromoCode(promoCode)
         if(response){
-            console.log(response)
             let discount = response['discount']
             ElNotification.success({
             message:'Kode promo benar!'
@@ -225,7 +224,6 @@ export default {
         })
         let response = await useCallegeStore().checkPromoCode(this.promoCode)
         if (response) {
-          // console.log(response)
           ElNotification.success({
             message: 'Kode promo benar!'
           })

@@ -32,10 +32,7 @@ export const useCallegeStore = defineStore('videochat', {
         let res = await axios.post(`${this.ngrokUrl}/googlelogin`, {
           code: code
         })
-        // console.log(res.data)
-        // console.log(res.data.success)
         if (res.data.success) {
-          // console.log('masuk sini broo')
           this.tokenSess = res.data.data.token
           localStorage.setItem('tokenSess', this.tokenSess)
           return res.data.data
@@ -64,7 +61,6 @@ export const useCallegeStore = defineStore('videochat', {
     },
     async authUser() {
       try {
-        console.log('jalanin auth')
         if (this.tokenSess) {
           let response = await axios.post(`${this.ngrokUrl}/auth`, {
             token: this.tokenSess
@@ -82,12 +78,10 @@ export const useCallegeStore = defineStore('videochat', {
             return true
           } else {
             this.tokenSess = null
-            console.log('auth failed')
             localStorage.removeItem('tokenSess')
             return false
           }
         } else {
-          console.log('blum login')
           return false
         }
       } catch {
@@ -117,7 +111,6 @@ export const useCallegeStore = defineStore('videochat', {
     },
     async getRoomToken() {
       try {
-        console.log('start token')
         if (this.tokenSess && !this.roomToken) {
           let res = await axios.post(`${this.ngrokUrl}/generateroomtoken`, {
             headers: { 'ngrok-skip-browser-warning': true },
@@ -131,7 +124,6 @@ export const useCallegeStore = defineStore('videochat', {
           }
         }
         else{
-          console.log('udah ada roomtoken')
           return false
         }
       } catch {
@@ -162,7 +154,6 @@ export const useCallegeStore = defineStore('videochat', {
     async leaveWebsite() {
       try {
         if (this.roomToken) {
-          console.log('leaving website...')
           await axios
             .post(`${this.ngrokUrl}/endcall`, {
               headers: { 'ngrok-skip-browser-warning': true },
@@ -176,10 +167,8 @@ export const useCallegeStore = defineStore('videochat', {
             })
         } 
         else {
-          // console.log('there isnt call to end')
         }
       } catch {
-        // console.log('error end call')
       }
     },
     async checkPromoCode(code) {

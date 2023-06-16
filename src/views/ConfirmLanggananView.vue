@@ -217,7 +217,6 @@ export default {
                 }
         )
         .then(()=>{
-            // console.log(this.select)
             this.onPayment = !this.onPayment
             ElNotification.success({
                 message:'request transaksi berhasil dibuat!, harap selesaikan transaksi yang anda buat.'
@@ -237,8 +236,6 @@ let totalDuration = ref(useCallegeStore().subscribeDuration)
 let selected = ref('bni')
 let select = computed(selected)
 const selectpayment = (val) =>{
-    console.log(selected)
     toRaw(selected) = val
-    console.log(selected)
 }
 </script> -->
