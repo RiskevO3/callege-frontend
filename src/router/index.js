@@ -36,11 +36,14 @@ const routes = [
     path:'/dashboard',
     name:'dashboard',
     // component: () => import('../views/DashboardView.vue'),
-    beforeEnter:(to,from,next)=>{
+    beforeEnter:async (to,from,next)=>{
       if(to.name == 'dashboard'){
         next('/dashboard/profile')
       }
       else if(to.name != 'dashboard'){
+        if(!from.name){
+          await useCallegeStore().authUser()
+        }
         if(useCallegeStore().sessionId){
           if(to.name = 'subscribe' || to.name == 'confirmPayment'){
             if(useCallegeStore().subscribeTime && useCallegeStore().subscribeDuration && useCallegeStore().totalSubscribePrice){
@@ -139,11 +142,13 @@ router.beforeResolve((to, from, next) => {
 
 const routeDashboard = ['faq','about','streaming']
 router.beforeEach(async (to, from, next) => {
-  await useCallegeStore().authUser()
+  if(localStorage.getItem('tokenSess') && !from.name){
+    await useCallegeStore().authUser()
+  }
   if(checkAvailableRoute(to.name,routes)){
     useCallegeStore().setRouteHistory(to.name)
     if(routeDashboard.includes(to.name)){
-      if(useCallegeStore().isVerif){
+      if(useCallegeStore().tokenSess){
         next()
       }
       else{

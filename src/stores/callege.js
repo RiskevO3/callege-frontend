@@ -20,7 +20,7 @@ export const useCallegeStore = defineStore('videochat', {
     subscribeTime: 2,
     subscribeDuration: '11 Juli 2023',
     totalSubscribePrice: 200000,
-    ngrokUrl: 'https://callege-api-66iaa.ondigitalocean.app/'
+    ngrokUrl: 'http://127.0.0.1:5001/'
   }),
   actions: {
     setRouteHistory(route) {
@@ -64,9 +64,8 @@ export const useCallegeStore = defineStore('videochat', {
     },
     async authUser() {
       try {
+        console.log('jalanin auth')
         if (this.tokenSess) {
-          // console.log('masuk kesini')
-          // console.log(this.tokenSess)
           let response = await axios.post(`${this.ngrokUrl}/auth`, {
             token: this.tokenSess
           })
@@ -80,16 +79,15 @@ export const useCallegeStore = defineStore('videochat', {
             this.jurusan = response.data.jurusan
             this.universitas = response.data.universitas
             this.phone = response.data.phone
-            // console.log('auth success')
             return true
           } else {
             this.tokenSess = null
-            // console.log('auth failed')
+            console.log('auth failed')
             localStorage.removeItem('tokenSess')
             return false
           }
         } else {
-          // console.log('blum login')
+          console.log('blum login')
           return false
         }
       } catch {
@@ -109,7 +107,6 @@ export const useCallegeStore = defineStore('videochat', {
           this.roomName = null
           this.name = null
           this.picture = null
-          // console.log('logout success')
           return true
         } else {
           return false
@@ -121,43 +118,51 @@ export const useCallegeStore = defineStore('videochat', {
     async getRoomToken() {
       try {
         console.log('start token')
-        // if (!this.roomToken) {
-        //   await axios
-        //     .post(`${this.ngrokUrl}/generatetoken`, {
-        //       headers: { 'ngrok-skip-browser-warning': true },
-        //       session_id: this.sessionId
-        //     })
-        //     .then((response) => {
-        //       if (response.data.success) {
-        //         this.roomToken = response.data.token
-        //         this.roomName = response.data.room_name
-        //         console.log(response.data.token)
-        //       } else {
-        //         console.log('gagal generate token')
-        //       }
-        //     })
-        // }
-        if (!this.roomToken) {
-          let res = await axios.post(`${this.ngrokUrl}/generatetoken`, {
+        if (this.tokenSess && !this.roomToken) {
+          let res = await axios.post(`${this.ngrokUrl}/generateroomtoken`, {
             headers: { 'ngrok-skip-browser-warning': true },
-            session_id: this.sessionId
+            session_token: this.tokenSess
           })
           if (res.data.success) {
-            this.roomToken = res.data.token
-            this.roomName = res.data.room_name
+            this.roomToken = res.data.roomToken
             return true
           } else {
             return false
           }
         }
-        return false
+        else{
+          console.log('udah ada roomtoken')
+          return false
+        }
       } catch {
+        return false
+      }
+    },
+    async getRoomSession(){
+      if(this.tokenSess && this.roomToken){
+        try{
+          let res = await axios.post(`${this.ngrokUrl}/getroomsession`,{
+            headers: { 'ngrok-skip-browser-warning': true },
+            session_token: this.tokenSess,
+            room_token: this.roomToken
+          })
+          if(res.data.success){
+            this.roomName = res.data.room_name
+            return true
+          }
+        }
+        catch{
+          return false
+        }
+      }
+      else{
         return false
       }
     },
     async leaveWebsite() {
       try {
         if (this.roomToken) {
+          console.log('leaving website...')
           await axios
             .post(`${this.ngrokUrl}/endcall`, {
               headers: { 'ngrok-skip-browser-warning': true },
@@ -167,12 +172,10 @@ export const useCallegeStore = defineStore('videochat', {
             .then((response) => {
               if (response.data.success) {
                 this.roomToken = null
-                // console.log('session ended')
-              } else {
-                // console.log('gagal end session')
               }
             })
-        } else {
+        } 
+        else {
           // console.log('there isnt call to end')
         }
       } catch {
@@ -193,6 +196,10 @@ export const useCallegeStore = defineStore('videochat', {
       } catch {
         return false
       }
+    },
+    async clearToken(){
+      this.tokenSess = null
+      localStorage.removeItem('tokenSess')
     }
   }
 })

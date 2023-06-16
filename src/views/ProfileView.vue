@@ -70,14 +70,14 @@
                                     class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Universitas</label>
                                 <input type="text" id="universitas" name="universitas"
                                     class="bg-[#EEEFF0] border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
-                                    placeholder="ex. Universitas Telkom" :value="useCallegeStore().universitas" disabled>
+                                    :value="useCallegeStore().universitas" disabled>
                             </div>
                             <div>
                                 <label for="jurusan"
                                     class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Jurusan</label>
                                 <input type="text" id="jurusan" name="jurusan"
                                     class="bg-[#EEEFF0] border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
-                                    placeholder="ex. S1 Informatika" :value="useCallegeStore().jurusan" disabled>
+                                    :value="useCallegeStore().jurusan" disabled>
                             </div>
                         </div>
                         <div class="flex justify-center mt-12">
