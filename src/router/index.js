@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { ElNotification } from 'element-plus'
+import { ElNotification,ElLoading } from 'element-plus'
 import { h } from 'vue'
 import {useCallegeStore} from '../stores/callege.js'
 import NProgress from 'nprogress';
@@ -11,6 +11,8 @@ import AboutView from '../views/AboutView.vue'
 import StreamingView from '../views/StreamingView.vue'
 import LanggananView from '../views/LanggananView.vue'
 import ConfirmLanggananView from '../views/ConfirmLanggananView.vue'
+
+let loading;
 const routes = [
   {
     path: '/',
@@ -42,7 +44,13 @@ const routes = [
       }
       else if(to.name != 'dashboard'){
         if(!from.name){
+          loading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+          });
           await useCallegeStore().authUser()
+          loading.close()
         }
         if(useCallegeStore().sessionId){
           if(to.name = 'subscribe' || to.name == 'confirmPayment'){
@@ -139,11 +147,15 @@ router.beforeResolve((to, from, next) => {
   }
   next()
 })
-
 const routeDashboard = ['faq','about','streaming']
 router.beforeEach(async (to, from, next) => {
   if(localStorage.getItem('tokenSess') && !from.name){
+    loading = ElLoading.service({
+      lock: true,
+      background: 'rgba(122, 122, 122, 0.8)',
+    });
     await useCallegeStore().authUser()
+    loading.close()
   }
   if(checkAvailableRoute(to.name,routes)){
     useCallegeStore().setRouteHistory(to.name)

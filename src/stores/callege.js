@@ -6,7 +6,7 @@ export const useCallegeStore = defineStore('videochat', {
       ? localStorage.getItem('routeHistory')
       : null,
     sessionId: null,
-    roomToken: null,
+    roomToken: localStorage.getItem('roomToken')  ? localStorage.getItem('roomToken') : null,
     tokenSess: localStorage.getItem('tokenSess') ? localStorage.getItem('tokenSess') : null,
     roomName: null,
     name: null,
@@ -98,6 +98,7 @@ export const useCallegeStore = defineStore('videochat', {
           localStorage.removeItem('tokenSess')
           this.sessionId = null
           this.roomToken = null
+          localStorage.removeItem('roomToken')
           this.roomName = null
           this.name = null
           this.picture = null
@@ -111,10 +112,11 @@ export const useCallegeStore = defineStore('videochat', {
     },
     async getRoomToken() {
       try {
-        if (this.tokenSess && !this.roomToken) {
+        if (this.tokenSess) {
           let res = await axios.post(`${this.ngrokUrl}/generateroomtoken`, {
             headers: { 'ngrok-skip-browser-warning': true },
-            session_token: this.tokenSess
+            session_token: this.tokenSess,
+            room_token: this.roomToken
           })
           if (res.data.success) {
             this.roomToken = res.data.roomToken
@@ -151,26 +153,6 @@ export const useCallegeStore = defineStore('videochat', {
         return false
       }
     },
-    async leaveWebsite() {
-      try {
-        if (this.roomToken) {
-          await axios
-            .post(`${this.ngrokUrl}/endcall`, {
-              headers: { 'ngrok-skip-browser-warning': true },
-              room_name: this.roomName,
-              user_sess: this.sessionId
-            })
-            .then((response) => {
-              if (response.data.success) {
-                this.roomToken = null
-              }
-            })
-        } 
-        else {
-        }
-      } catch {
-      }
-    },
     async checkPromoCode(code) {
       try {
         let response = await axios.post(`${this.ngrokUrl}/promocodeverification`, {
@@ -192,3 +174,25 @@ export const useCallegeStore = defineStore('videochat', {
     }
   }
 })
+
+
+// async leaveWebsite() {
+//   try {
+//     if (this.roomToken) {
+//       await axios
+//         .post(`${this.ngrokUrl}/endcall`, {
+//           headers: { 'ngrok-skip-browser-warning': true },
+//           room_name: this.roomName,
+//           user_sess: this.sessionId
+//         })
+//         .then((response) => {
+//           if (response.data.success) {
+//             this.roomToken = null
+//           }
+//         })
+//     } 
+//     else {
+//     }
+//   } catch {
+//   }
+// },
