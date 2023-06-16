@@ -22,8 +22,9 @@
         <li>
           <button
             @click="callHandle"
-            class="text-lg border-2 border-purple-500 bg-purple-500 text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90"
-          >
+            class="text-lg border-2 border-purple-500 bg-purple-500 text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
+            :disabled = "loadingPartner"
+            >
             <i :class="{'fas fa-play':callEnded,'fa-solid fa-forward':!callEnded}"></i>
             {{ !callEnded ? 'Skip' : 'Mulai'  }}
           </button>
@@ -274,27 +275,23 @@ export default {
             }
           })
           participant.on('trackSubscribed', (track) => {
-            if(!this.isCountdown){
-            this.startCountdown()
-            this.isCountdown = true
-            }
-            this.callEnded = false
-            this.loadingPartner = false
-            if(!document.getElementsByTagName('.el-notification--success')){
-                ElNotification.success({
-                title:'success!',
-                message:'you are connecting to new participan'
+            mediaContainer.appendChild(track.attach())
+            if(track.kind == 'video'){
+              this.loadingPartner = false
+              this.callEnded = false
+              this.callEnded = false
+              this.countdown = 600
+              if(!this.isCountdown){
+                this.startCountdown()
+                this.isCountdown = true
+              }
+              ElNotification.success({
+                message:'you are connecting to participant!...'
               })
             }
-            mediaContainer.appendChild(track.attach())
           })
         })
         room.on('participantConnected', (participant) => {
-        this.callEnded = false
-        if(!this.isCountdown){
-          this.startCountdown()
-          this.isCountdown = true
-        }
         let remoteVideo = mediaContainer.getElementsByTagName('video')
         let remoteAudio = mediaContainer.getElementsByTagName('audio')
         if(remoteVideo.length > 0){
@@ -311,21 +308,20 @@ export default {
             }
           })
           participant.on('trackSubscribed', (track) => {
-            if(!this.isCountdown){
-            this.startCountdown()
-            this.isCountdown = true
-            }
-            this.loadingPartner = false
-            this.callEnded = false
-            if(!document.getElementsByTagName('.el-notification--success')){
+            mediaContainer.appendChild(track.attach())
+            if(track.kind == 'video'){
+              this.loadingPartner = false
+              this.callEnded = false
+              this.callEnded = false
+              this.countdown = 600
+              if(!this.isCountdown){
+                this.startCountdown()
+                this.isCountdown = true
+              }
               ElNotification.success({
-                title:'success!',
-                message:'you are connecting to new participan'
+                message:'you are connecting to participant!...'
               })
             }
-            // this.loadingToast = null
-            // }
-            mediaContainer.appendChild(track.attach())
           })
         })
         room.on('disconnected', (room) => {
@@ -393,8 +389,6 @@ export default {
     joinRoomStatus(msg) {
       this.elementLoadingText = 'Mencari partner...'
       this.loadingPartner = true
-    },
-    leaveRoomStatus(msg) {
     },
     message(msg) {
       if (msg['from'] != useCallegeStore().sessionId) {
