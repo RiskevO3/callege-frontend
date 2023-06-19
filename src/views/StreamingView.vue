@@ -426,12 +426,13 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 0.75rem;
 }
 
 .video-container video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* border-radius: 0.75rem; */
+  border-radius: 0.75rem;
 }
 </style>

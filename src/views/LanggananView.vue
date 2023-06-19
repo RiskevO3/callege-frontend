@@ -208,7 +208,7 @@ export default {
       return useCallegeStore().subscribeTime
     },
     subscribeDuration() {
-      return useCallegeStore().totalSubscribePrice
+      return useCallegeStore().subscribeDuration
     },
     totalPrice() {
       return useCallegeStore().totalSubscribePrice
@@ -241,7 +241,8 @@ export default {
       }
     },
     confirmPayment() {
-      this.$router.push({ name: 'confirmPayment' })
+      useCallegeStore().promoCode = this.promoCode
+      this.$router.push({ name: 'confirmpayment' })
     }
   }
 }

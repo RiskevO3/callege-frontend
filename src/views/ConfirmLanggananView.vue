@@ -128,29 +128,40 @@
               <p class="mt-4 font-normal text-base text-black dark:text-gray-400">
                 Total harga yang harus dibayar
               </p>
-              <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-400">RP200.000</p>
+              <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-400">RP{{ totalPay.toLocaleString() }}</p>
               <hr class="mt-5 border-black" />
               <hr />
               <p class="mt-4 font-regular text-base text-black dark:text-gray-400">
-                Lakukan pembayaran sebelum
+                Sisa Waktu Pembayaran:
               </p>
-              <p class="font-bold text-base text-[#ffb83c] dark:text-gray-400">
-                Kamis, 19 Mei 2023 09:00 WIB
+              <p class="font-bold text-black text-center font-bold text-[#ffb83c] bg-red-500 dark:text-gray-400">
+                {{ formattedCountdown }}
               </p>
-              <p class="mt-4 font-regular text-base text-black dark:text-gray-400">
-                Kode Perusahaan
-              </p>
-              <p class="mt-4 font-bold font-regular text-base text-black dark:text-gray-400">
-                70012
-              </p>
-              <hr class="mt-3 border-black" />
-              <hr />
+              <template v-if="!(selected == 'qris')">
               <p class="mt-4 font-regular text-base text-black dark:text-gray-400">
                 No. Virtual Account
               </p>
               <p class="mt-4 font-bold font-regular text-base text-black dark:text-gray-400">
-                6782132212
+                {{ paymentNumber }}
+                <i class="fa-solid fa-copy hover:text-[#7668e3] pr-0"
+                @click="copyToClipboard(paymentNumber)"
+                >
+                </i>
               </p>
+              </template>
+              <template v-else>
+                <div class="mt-4 font-bold text-center text-white content-center">
+                <p class="mt-4 font-regular text-base text-black dark:text-gray-400">
+                  Harap Scan QRIS dibawah ini untuk melakukan pembayaran
+                </p>
+                <figure class="w-full">
+                  <vue-qrcode
+                  :value="paymentNumber"
+                  :options="{ width: 450 }"
+                  ></vue-qrcode>
+                </figure>
+                </div>
+              </template>
               <hr class="mt-3 border-black" />
               <hr />
               <button
@@ -167,7 +178,7 @@
 </template>
 <script>
 import { useCallegeStore } from '../stores/callege'
-import { ElMessageBox, ElNotification } from 'element-plus'
+import { ElLoading, ElMessageBox, ElNotification } from 'element-plus'
 export default {
   name: 'ConfirmLanggananView',
   data() {
@@ -178,12 +189,15 @@ export default {
         bni: 'bni.svg',
         bca: 'bca.svg'
       },
+      countdown: 86400,
       totalPay: useCallegeStore().totalSubscribePrice,
       totalBulan: useCallegeStore().subscribeTime,
       totalDuration: useCallegeStore().subscribeDuration,
-      select: '',
-      selectImage: 'qris.svg',
-      onPayment: true
+      select: 'mandiri',
+      selectImage: 'mandiri2.png',
+      paymentNo:null,
+      onPayment: false,
+      loading:null
     }
   },
   computed: {
@@ -198,9 +212,30 @@ export default {
     },
     totalPayment(){
         return this.totalPay
+    },
+    paymentNumber(){
+      return this.paymentNo
+    },
+    formattedCountdown() {
+      const hours = Math.floor(this.countdown / 3600);
+      const minutes = Math.floor((this.countdown % 3600) / 60);
+      const seconds = this.countdown % 60;
+      return `${this.formatTime(hours)}:${this.formatTime(minutes)}:${this.formatTime(seconds)}`;
     }
   },
   methods: {
+    startCountdown() {
+      const timer = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          clearInterval(timer);
+        }
+      }, 1000); // Set interval 1 detik (1000 ms)
+    },
+    formatTime(time) {
+      return time < 10 ? `0${time}` : time;
+    },
     selectpayment(val) {
       this.select = val
       this.selectImage = this.paymentImage[val]
@@ -216,12 +251,49 @@ export default {
                     center: true,
                 }
         )
-        .then(()=>{
-            this.onPayment = !this.onPayment
-            ElNotification.success({
-                message:'request transaksi berhasil dibuat!, harap selesaikan transaksi yang anda buat.'
-            })
+          .then(async ()=>{
+              this.loading = ElLoading.service({
+                lock: true,
+                text: 'Loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+              })
+              useCallegeStore().paymentChannel = this.select
+              let res = await useCallegeStore().makeTransaction()
+              if(res){
+                  this.totalPay = res.totalAmount
+                  this.paymentNo = res.paymentNo
+                  this.onPayment = true
+                  this.$socket.emit('joinRoom',{'room_session':res.paymentId})
+                  this.startCountdown()
+                  this.loading.close()
+                  ElNotification.success({
+                    message:'Request pembayaran berhasil dibuat, harap lakukan pembayaran sebelum waktu habis.'
+                  })
+              }
+              else{
+                this.loading.close()
+                ElNotification.error({
+                  message:'Terjadi kesalahan, silahkan coba lagi'
+                })
+              }
+          })
+    },
+    copyToClipboard(val){
+        navigator.clipboard.writeText(val)
+        ElNotification.success({
+            message:'No. Virtual Account berhasil dicopy!'
         })
+    }
+  },
+  sockets:{
+    async paymentStatus(msg){
+      if(msg['status'] == 'success'){
+        await useCallegeStore().authUser()
+        this.$router.push({name:'profile'})
+        ElNotification.success({
+          message:'Pembayaran berhasil dilakukan, terimakasih banyak!'
+        })
+      }
     }
   }
 }

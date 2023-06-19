@@ -13,8 +13,11 @@
                             <p class="text-lg font-bold text-gray-900 truncate dark:text-white">
                                 {{ useCallegeStore().name  }}
                             </p>
-                            <p class="text-md text-gray-500 truncate dark:text-gray-400 font-semibold">
-                                Free User
+                            <p class="text-md text-gray-500 truncate dark:text-gray-400 font-bold">
+                                {{ premiumStatus ? 'Premium User' : 'Free User' }}
+                            </p>
+                            <p class="text-sm text-gray-500 truncate font-semibold" v-if="premiumStatus">
+                                Valid Untill : {{ premiumStatus ? premiumStatus : 'Tidak Aktif'  }}
                             </p>
                         </div>
                         <div class="items-center text-base font-semibold text-gray-900 dark:text-white">
@@ -103,12 +106,19 @@ import { ref } from 'vue';
 const router = useRouter()
 let nama_panggilan = useCallegeStore().shortName
 let phone = ref(useCallegeStore().phone)
-function hitungTanggal(tambahanBulan) {
-  var tanggal = new Date(); // Mendapatkan tanggal hari ini
+let premiumStatus = useCallegeStore().isPremium ? hitungTanggal(0,useCallegeStore().isPremium) : null
+function hitungTanggal(tambahanBulan,awaltanggal=null) {
+  let tanggal;
+  if(!awaltanggal){
+    tanggal = new Date(); // Mendapatkan tanggal hari ini
+  }
+  else{
+    tanggal = new Date(awaltanggal)
+  }
   tanggal.setMonth(tanggal.getMonth() + tambahanBulan); // Menambahkan bulan ke tanggal
   
   // Membuat objek untuk nama bulan dalam Bahasa Indonesia
-  var namaBulan = [
+  let namaBulan = [
     "Januari",
     "Februari",
     "Maret",
@@ -122,13 +132,12 @@ function hitungTanggal(tambahanBulan) {
     "November",
     "Desember"
   ];
-  
   // Mendapatkan informasi tanggal, bulan, dan tahun
-  var tanggalHasil = tanggal.getDate();
-  var bulanHasil = namaBulan[tanggal.getMonth()];
-  var tahunHasil = tanggal.getFullYear();
+  let tanggalHasil = tanggal.getDate();
+  let bulanHasil = namaBulan[tanggal.getMonth()];
+  let tahunHasil = tanggal.getFullYear();
   // Menghasilkan output dalam format yang diinginkan
-  var output = tanggalHasil + " " + bulanHasil + " " + tahunHasil;
+  let output = tanggalHasil + " " + bulanHasil + " " + tahunHasil;
   
   return output;
 }
@@ -182,55 +191,51 @@ const updateProfile = () => {
             }
 }
 const openSubscribe = () => {
-    ElNotification.info({
-        message:'Fitur Premium Akan Segera Hadir!'
+  if(useCallegeStore().isVerif){
+    ElMessageBox.prompt('Masukkan total bulan yang anda inginkan', 'Konfirmasi Langganan', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputType:'number',
+    placeholder:'0',
+    inputValidator: (val) => {
+        if(val > 0){
+            return true
+        }
+        else{
+            return 'Harap masukkan jumlah bulan langganan lebih dari 0'
+        }
     }
-    )
-//   if(useCallegeStore().isVerif){
-//     ElMessageBox.prompt('Masukkan total bulan yang anda inginkan', 'Konfirmasi Langganan', {
-//     confirmButtonText: 'OK',
-//     cancelButtonText: 'Cancel',
-//     inputType:'number',
-//     placeholder:'0',
-//     inputValidator: (val) => {
-//         if(val > 0){
-//             return true
-//         }
-//         else{
-//             return 'Harap masukkan jumlah bulan langganan lebih dari 0'
-//         }
-//     }
-//   })
-//     .then(({ value }) => {
-//       let totalBulan = parseInt(value)
-//       let totalDuration = hitungTanggal(totalBulan)
-//       if(parseInt(totalBulan) > 0){
-//         ElMessage.success({
-//         message: `anda akan mensubscribe sampai ${totalDuration}`,
-//       })
-//       useCallegeStore().subscribeTime = totalBulan
-//       useCallegeStore().subscribeDuration = totalDuration
-//       useCallegeStore().totalSubscribePrice = totalBulan * 200000
-//       router.push({name:'subscribe'})
-//       }
-//       else{
-//         ElMessage.error({
-//         message: 'tidak bisa mensubscribe kurang dari 1 bulan',
-//       })
-//       }
-//     })
-//     .catch(() => {
-//       ElMessage({
-//         type: 'info',
-//         message: 'Input canceled',
-//       })
-//     })
-//   }
-//   else{
-//     ElNotification.error({
-//         message:'Harap isi nomor telfon dan nama panggilan terlebih dahulu!.'
-//     })
-//   }
+  })
+    .then(({ value }) => {
+      let totalBulan = parseInt(value)
+      let totalDuration = premiumStatus ? hitungTanggal(totalBulan,useCallegeStore().isPremium) : hitungTanggal(totalBulan)
+      if(parseInt(totalBulan) > 0){
+        ElMessage.success({
+        message: `anda akan mensubscribe sampai ${totalDuration}`,
+      })
+      useCallegeStore().subscribeTime = totalBulan
+      useCallegeStore().subscribeDuration = totalDuration
+      useCallegeStore().totalSubscribePrice = totalBulan * 200000
+      router.push({name:'subscribe'})
+      }
+      else{
+        ElMessage.error({
+        message: 'tidak bisa mensubscribe kurang dari 1 bulan',
+      })
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      })
+    })
+  }
+  else{
+    ElNotification.error({
+        message:'Harap isi nomor telfon dan nama panggilan terlebih dahulu!.'
+    })
+  }
 }
 </script>
 <!-- <script>

@@ -43,32 +43,8 @@ const routes = [
         next('/dashboard/profile')
       }
       else if(to.name != 'dashboard'){
-        if(!from.name){
-          loading = ElLoading.service({
-            lock: true,
-            text: 'Loading',
-            background: 'rgba(0, 0, 0, 0.7)',
-          });
-          await useCallegeStore().authUser()
-          loading.close()
-        }
         if(useCallegeStore().sessionId){
-          if(to.name = 'subscribe' || to.name == 'confirmPayment'){
-            if(useCallegeStore().subscribeTime && useCallegeStore().subscribeDuration && useCallegeStore().totalSubscribePrice){
-              next()
-            }
-            else{
-              ElNotification({
-                title:'Error',
-                message:'anda harus membuat request transaksi terlebih dahulu!',
-                type:'error'
-              })
-              next({name:'profile'})
-            }
-          }
-          else{
             next()
-          }
         }
         else{
           ElNotification({
@@ -111,7 +87,7 @@ const routes = [
       },
       {
         path:'confirmpayment',
-        name:'confirmPayment',
+        name:'confirmpayment',
         component:ConfirmLanggananView
       }
     ]
@@ -147,49 +123,70 @@ router.beforeResolve((to, from, next) => {
   }
   next()
 })
-const routeDashboard = ['faq','about','streaming']
+const routeDashboard = ['faq','about','streaming','subscribe','confirmpayment']
+
 router.beforeEach(async (to, from, next) => {
-  if(localStorage.getItem('tokenSess') && !from.name){
-    loading = ElLoading.service({
+  const tokenSess = localStorage.getItem('tokenSess');
+  const callegeStore = useCallegeStore();
+
+  if (tokenSess && !from.name) {
+    const loading = ElLoading.service({
       lock: true,
       background: 'rgba(0, 0, 0, 0.7)',
     });
-    await useCallegeStore().authUser()
-    loading.close()
+    await callegeStore.authUser();
+    loading.close();
   }
-  if(checkAvailableRoute(to.name,routes)){
-    useCallegeStore().setRouteHistory(to.name)
-    if(routeDashboard.includes(to.name)){
-      if(useCallegeStore().tokenSess){
-        next()
-      }
-      else{
+
+  if (checkAvailableRoute(to.name, routes)) {
+    callegeStore.setRouteHistory(to.name);
+
+    if (routeDashboard.includes(to.name)) {
+      if (callegeStore.tokenSess) {
+        if (to.name == 'subscribe' || to.name == 'confirmpayment') {
+          if (
+            callegeStore.subscribeTime &&
+            callegeStore.subscribeDuration &&
+            callegeStore.totalSubscribePrice
+          ) {
+            next();
+          } else {
+            ElNotification({
+              title: 'Error',
+              message: 'Anda harus membuat request transaksi terlebih dahulu!',
+              type: 'error',
+            });
+            next({ name: 'profile' });
+          }
+        } else {
+          next();
+        }
+      } else {
         ElNotification({
-          title:'Perhatian',
-          message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
-          type:'warning'
-        })
-        next({name:'profile'})
+          title: 'Perhatian',
+          message: h('p', {
+            style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+          }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
+          type: 'warning',
+        });
+        next({ name: 'profile' });
       }
+    } else {
+      next();
     }
-    else{
-      next()
-    }
-  }
-  else{
+  } else {
     ElNotification({
-      title:'Error',
-      message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Page not found!'),
-      type:'error'
-    })
-    if(useCallegeStore().routeHistory){
-      next({name:useCallegeStore().routeHistory})
-    }
-    else{
-      next('/')
-    }
+      title: 'Error',
+      message: h('p', {
+        style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+      }, 'Page not found!'),
+      type: 'error',
+    });
+
+    const routeHistory = callegeStore.routeHistory;
+    next(routeHistory ? { name: routeHistory } : '/');
   }
-})
+});
 
 router.afterEach(() => {
   // Complete the animation of the route progress bar.

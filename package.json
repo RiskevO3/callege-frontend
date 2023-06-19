@@ -3,20 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview --host",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^2.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.3.5",
     "flowbite": "^1.6.5",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.36",
+    "qrcode": "^1.5.3",
     "twilio-video": "^2.27.0",
-    "vue": "^3.3.2",
+    "vue": "^3.3.4",
     "vue-3-socket.io": "^1.0.5",
     "vue-router": "^4.2.0",
     "vue3-google-login": "^2.0.15"

@@ -17,9 +17,11 @@ export const useCallegeStore = defineStore('videochat', {
     universitas: null,
     email: null,
     isVerif: null,
-    subscribeTime: 2,
-    subscribeDuration: '11 Juli 2023',
-    totalSubscribePrice: 200000,
+    subscribeTime: null,
+    subscribeDuration: null,
+    totalSubscribePrice: null,
+    promoCode: null,
+    paymentChannel: null,
     ngrokUrl: import.meta.env.VITE_SERVER_HOST
   }),
   actions: {
@@ -51,6 +53,7 @@ export const useCallegeStore = defineStore('videochat', {
           phone: `0${this.phone}`
         })
         if (res.data.success) {
+          this.isVerif = true
           return true
         } else {
           return false
@@ -66,6 +69,7 @@ export const useCallegeStore = defineStore('videochat', {
             token: this.tokenSess
           })
           if (response.data.success) {
+            this.isPremium = response.data.is_premium ? Date.parse(response.data.is_premium) : false
             this.isVerif = response.data.verified_account
             this.sessionId = response.data.session_id
             this.name = response.data.name
@@ -165,6 +169,25 @@ export const useCallegeStore = defineStore('videochat', {
           return false
         }
       } catch {
+        return false
+      }
+    },
+    async makeTransaction(){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/maketransaction`, {
+          token: this.tokenSess,
+          total_price: this.totalSubscribePrice,
+          subscribe_time: this.subscribeTime,
+          promo_code: this.promoCode,
+          payment_channel: this.paymentChannel
+        })
+        if (response.data.success) {
+          return response.data
+        }
+        else{
+          return false
+        }
+      } catch (error) {
         return false
       }
     },
