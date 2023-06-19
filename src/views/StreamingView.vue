@@ -336,6 +336,7 @@ export default {
         })
         room.on('participantDisconnected', (participant) => {
           // this.activeRoom = null
+          this.messages = []
           let remoteVideo = mediaContainer.getElementsByTagName('video')
           let remoteAudio = mediaContainer.getElementsByTagName('audio')
           if(remoteVideo.length > 0){
