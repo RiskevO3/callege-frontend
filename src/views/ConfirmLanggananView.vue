@@ -265,9 +265,8 @@ export default {
                   this.totalPay = res.totalAmount
                   this.paymentNo = res.paymentNo
                   this.transactionId = res.transactionId
-                  console.log(this.transactionId)
                   this.onPayment = true
-                  this.$socket.emit('joinRoom',{'room_session':res.paymentId})
+                  this.$socket.emit('joinRoom',{'room_session':this.transactionId})
                   this.startCountdown()
                   this.loading.close()
                   ElNotification.success({
