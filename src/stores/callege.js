@@ -191,6 +191,22 @@ export const useCallegeStore = defineStore('videochat', {
         return false
       }
     },
+    async refreshPaymentStatus(transactionId){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/refreshpaymentstatus`, {
+          token: this.tokenSess,
+          transaction_id: transactionId
+        })
+        if (response.data.success){
+            return true
+        }
+        else{
+          return false
+        }
+      } catch (error) {
+        return false
+      }
+    },
     async clearToken(){
       this.tokenSess = null
       localStorage.removeItem('tokenSess')

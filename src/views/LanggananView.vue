@@ -79,7 +79,7 @@
           <div class="flex items-center justify-between">
             <p class="mt-4 font-bold text-black dark:text-gray-400">Detail Paket</p>
             <p class="mt-4 font-bold text-[#F45050] dark:text-gray-400">
-              Rp {{ totalPrice.toLocaleString() }}
+              Rp {{ totalPrice.toLocaleString('id-ID') }}
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@
               Paket Premium Callege {{ subscribeTime }} Bulan
             </p>
             <p class="font-normal text-black dark:text-gray-400">
-              Rp {{ totalPrice.toLocaleString() }}
+              Rp {{ totalPrice.toLocaleString('id-ID') }}
             </p>
           </div>
           <h5 class="mt-4 mb-3 text-base font-bold tracking-tight text-black dark:text-white">

@@ -42,19 +42,6 @@ const routes = [
       if(to.name == 'dashboard'){
         next('/dashboard/profile')
       }
-      else if(to.name != 'dashboard'){
-        if(useCallegeStore().sessionId){
-            next()
-        }
-        else{
-          ElNotification({
-            title:'Error',
-            message:'U need to login first!',
-            type:'error'
-          })
-          next({name:'login'})
-        }
-      }
       else{
         next()
       }
@@ -140,36 +127,44 @@ router.beforeEach(async (to, from, next) => {
 
   if (checkAvailableRoute(to.name, routes)) {
     callegeStore.setRouteHistory(to.name);
-
     if (routeDashboard.includes(to.name)) {
-      if (callegeStore.tokenSess) {
-        if (to.name == 'subscribe' || to.name == 'confirmpayment') {
-          if (
-            callegeStore.subscribeTime &&
-            callegeStore.subscribeDuration &&
-            callegeStore.totalSubscribePrice
-          ) {
+      if(callegeStore.tokenSess){
+        if (callegeStore.isVerif) {
+          if (to.name == 'subscribe' || to.name == 'confirmpayment') {
+            if (callegeStore.subscribeTime&&callegeStore.subscribeDuration &&callegeStore.totalSubscribePrice) {
+              next();
+            } 
+            else {
+              ElNotification({
+                title: 'Error',
+                message: 'Anda harus membuat request transaksi terlebih dahulu!',
+                type: 'error',
+              });
+              next({ name: 'profile' });
+            }
+          } 
+          else {
             next();
-          } else {
-            ElNotification({
-              title: 'Error',
-              message: 'Anda harus membuat request transaksi terlebih dahulu!',
-              type: 'error',
-            });
-            next({ name: 'profile' });
           }
         } else {
-          next();
+          ElNotification({
+            title: 'Perhatian',
+            message: h('p', {
+              style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+            }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
+            type: 'warning',
+          });
+          next({ name: 'profile' });
         }
-      } else {
+      }else{
         ElNotification({
-          title: 'Perhatian',
+          title: 'Error',
           message: h('p', {
             style: 'color:black;font-weight: bold;letter-spacing: 1px;',
-          }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
-          type: 'warning',
+          }, 'Anda harus login terlebih dahulu!'),
+          type: 'error',
         });
-        next({ name: 'profile' });
+        next({ name: 'login' });
       }
     } else {
       next();

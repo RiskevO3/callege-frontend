@@ -13,9 +13,9 @@
                         relasimu
                         lebih mudah hanya satu langkah.</h2>
 
-                    <a href="#"
+                    <RouterLink to="/dashboard"
                         class="inline-block text-base font-semibold text-white bg-primary py-3 px-8 rounded-full hover:shadow-lg hover:bg-sub transition ease-in-out hover:scale-110">Mulai
-                        Sekarang</a>
+                        Sekarang</RouterLink>
 
 
                 </div>
@@ -154,10 +154,10 @@
                         <div class="pb-[40px]">
                             <h1 class="font-bold text-4xl pb-[10px]" style="color: #FFBF42;">Rp 0</h1>
                             <hr class="border-t-2 font-bold pb-[20px]">
-                            <a href="#"
+                            <RouterLink to="/login"
                                 class="inline-block text-base font-semibold text-white bg-primary py-3 px-7 rounded-full hover:shadow-lg hover:bg-sub transition ease-in-out hover:scale-105"
                                 style="background-color: #F45050;">Coba
-                                Sekarang</a>
+                                Sekarang</RouterLink>
                         </div>
                         <div class="pb-[20px]">
                             <h1 class="font-bold text-xl text-white pb-[10px]">Benefit</h1>
@@ -185,13 +185,13 @@
                             </p>
                         </div>
                         <div class="pb-[40px]">
-                            <h1 class="font-bold text-4xl pb-[10px]" style="color: #FFBF42;">Rp 250.000<span
-                                    class="text-base text-white">/tahun</span>
+                            <h1 class="font-bold text-4xl pb-[10px]" style="color: #FFBF42;">Rp 200.000<span
+                                    class="text-base text-white">/bulan</span>
                             </h1>
                             <hr class="border-t-2 font-bold pb-[20px]">
-                            <a href="#"
+                            <RouterLink to="/dashboard/subscribe"
                                 class="inline-block text-base font-semibold text-white bg-primary py-3 px-8 rounded-full hover:shadow-lg hover:bg-sub transition ease-in-out hover:scale-105"
-                                style="background-color: #F45050;">Langganan</a>
+                                style="background-color: #F45050;">Langganan</RouterLink>
                         </div>
                         <div class="pb-[20px]">
                             <h1 class="font-bold text-xl text-white pb-[10px]">Benefit</h1>
@@ -221,7 +221,10 @@
                 <div class="w-full max-w-[1240px] h-full max-h-[520px] bg-primary rounded-[50px] relative">
                     <div class="flex justify-center items-start w-full h-full relative">
                         <div class="flex flex-col justify-start items-center h-full">
-                            <h1 class="text-5xl font-bold text-white text-center pt-[120px]">Mulai Sekarang dan Temukan
+                            <h1 
+                            to="/dashboard" 
+                            class="text-5xl font-bold text-white text-center pt-[120px]">
+                                Mulai Sekarang dan Temukan
                             </h1>
                             <h1 class="text-5xl font-bold text-white text-center">Teman Terbaikmu!</h1>
                             <h2 class="text-base font-medium text-white text-center px-[250px] pt-[10px] pb-[90px]">
@@ -289,3 +292,6 @@
   </div>
 </div>
 </template>
+<script setup>
+import { RouterLink } from 'vue-router';
+</script>

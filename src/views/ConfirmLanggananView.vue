@@ -21,7 +21,7 @@
               Total harga yang harus dibayar
             </p>
             <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-400">
-              RP {{ totalPayment.toLocaleString() }}
+              RP {{ totalPayment.toLocaleString('id-ID') }}
             </p>
             <p class="text-sm text-gray-600">
                 *Total pembayaran diatas adalah estimasi harga yang harus dibayar, harga dapat berubah sesuai dengan harga yang tertera pada payment setelah ini
@@ -108,7 +108,7 @@
             </ul>
             <button
               class="mt-8 flex justify-center items-center px-3 py-4 text-sm font-medium text-center text-white bg-[#7868E6] rounded-full hover:bg-[#574aab] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              @click="changePaymentStatus"
+              @click="choosePayment"
             >
               Pilih Metode Pembayaran
             </button>
@@ -128,7 +128,7 @@
               <p class="mt-4 font-normal text-base text-black dark:text-gray-400">
                 Total harga yang harus dibayar
               </p>
-              <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-400">RP{{ totalPay.toLocaleString() }}</p>
+              <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-400">RP{{ totalPay.toLocaleString('id-ID') }}</p>
               <hr class="mt-5 border-black" />
               <hr />
               <p class="mt-4 font-regular text-base text-black dark:text-gray-400">
@@ -166,7 +166,8 @@
               <hr />
               <button
                 class="mt-8 flex justify-center items-center px-3 py-4 text-sm font-medium text-center text-white bg-[#7868E6] rounded-full hover:bg-[#574aab] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
+                @click="refreshPayment"
+                >
                 Refresh Pembayaran
                 </button>
                 </div>
@@ -197,7 +198,8 @@ export default {
       selectImage: 'mandiri2.png',
       paymentNo:null,
       onPayment: false,
-      loading:null
+      loading:null,
+      transactionId:null
     }
   },
   computed: {
@@ -240,7 +242,7 @@ export default {
       this.select = val
       this.selectImage = this.paymentImage[val]
     },
-    changePaymentStatus() {
+    choosePayment() {
         ElMessageBox.confirm(
                 `Anda memilih channel pembayaran ${this.select}, lanjutkan?`,
                 'Warning',
@@ -262,6 +264,8 @@ export default {
               if(res){
                   this.totalPay = res.totalAmount
                   this.paymentNo = res.paymentNo
+                  this.transactionId = res.transactionId
+                  console.log(this.transactionId)
                   this.onPayment = true
                   this.$socket.emit('joinRoom',{'room_session':res.paymentId})
                   this.startCountdown()
@@ -277,6 +281,27 @@ export default {
                 })
               }
           })
+    },
+    async refreshPayment(){
+      this.loading = ElLoading.service({
+        lock: true,
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      let res = await useCallegeStore().refreshPaymentStatus(this.transactionId)
+      if (res){
+        ElNotification.success({
+          message:'sukses!,pembayaran anda telah berhasil dilakukan!'
+        })
+        await useCallegeStore().authUser()
+        this.$router.push({name:'profile'})
+        this.loading.close()
+      }else{
+        ElNotification.error({
+          message:'Pembayaran anda belum sukses, silahkan coba lagi!'
+        })
+        this.loading.close()
+      }
     },
     copyToClipboard(val){
         navigator.clipboard.writeText(val)
