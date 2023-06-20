@@ -110,7 +110,7 @@ router.beforeResolve((to, from, next) => {
   }
   next()
 })
-const routeDashboard = ['faq','about','streaming','subscribe','confirmpayment']
+const routeDashboard = ['faq','about','streaming','subscribe','confirmpayment','dashboard','profile']
 
 router.beforeEach(async (to, from, next) => {
   const tokenSess = localStorage.getItem('tokenSess');
