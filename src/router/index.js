@@ -102,6 +102,117 @@ const checkAvailableRoute = (destination, routes) => {
   return false;
 };
 
+function showLoadingOverlay() {
+  const loading = ElLoading.service({
+    lock: true,
+    background: 'rgba(0, 0, 0, 0.7)',
+  });
+}
+
+function hideLoadingOverlay() {
+  loading.close();
+}
+
+function isAvailableRoute(routeName) {
+  return checkAvailableRoute(routeName, routes);
+}
+
+function isDashboardRoute(routeName) {
+  return routeDashboard.includes(routeName);
+}
+
+async function handleDashboardRoute(to, callegeStore, next) {
+  if (callegeStore.tokenSess) {
+    if (callegeStore.isVerif) {
+      if (isSubscribeRoute(to.name)) {
+        handleSubscribeRoute(to, callegeStore, next);
+      } else {
+        next();
+      }
+    } else if (to.name === 'profile') {
+      next();
+    } else {
+      showDataProfileWarning();
+      redirectToProfile(callegeStore, next);
+    }
+  } else {
+    showLoginError();
+    redirectToLogin(next);
+  }
+}
+
+function isSubscribeRoute(routeName) {
+  return routeName === 'subscribe' || routeName === 'confirmpayment';
+}
+
+function handleSubscribeRoute(to, callegeStore, next) {
+  if (hasSubscribeData(callegeStore)) {
+    next();
+  } else {
+    showSubscribeRequestError();
+    redirectToProfile(next);
+  }
+}
+
+function hasSubscribeData(callegeStore) {
+  return (
+    callegeStore.subscribeTime &&
+    callegeStore.subscribeDuration &&
+    callegeStore.totalSubscribePrice
+  );
+}
+
+function showSubscribeRequestError() {
+  ElNotification({
+    title: 'Error',
+    message: 'Anda harus membuat request transaksi terlebih dahulu!',
+    type: 'error',
+  });
+}
+
+function showDataProfileWarning() {
+  ElNotification({
+    title: 'Perhatian',
+    message: h('p', {
+      style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+    }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
+    type: 'warning',
+  });
+}
+
+function showLoginError() {
+  ElNotification({
+    title: 'Error',
+    message: h('p', {
+      style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+    }, 'Anda harus login terlebih dahulu!'),
+    type: 'error',
+  });
+}
+
+function redirectToProfile(callegeStore, next) {
+  next({ name: 'profile' });
+}
+
+function redirectToLogin(next) {
+  next({ name: 'login' });
+}
+
+function showNotFoundError() {
+  ElNotification({
+    title: 'Error',
+    message: h('p', {
+      style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+    }, 'Page not found!'),
+    type: 'error',
+  });
+}
+
+function redirectToPreviousRoute(callegeStore, next) {
+  const routeHistory = callegeStore.routeHistory;
+  next(routeHistory ? { name: routeHistory } : '/');
+}
+
 router.beforeResolve((to, from, next) => {
   // If this isn't an initial page load.
   if (to.name) {
@@ -111,84 +222,110 @@ router.beforeResolve((to, from, next) => {
   next()
 })
 const routeDashboard = ['faq','about','streaming','subscribe','confirmpayment','dashboard','profile']
-
 router.beforeEach(async (to, from, next) => {
   const tokenSess = localStorage.getItem('tokenSess');
   const callegeStore = useCallegeStore();
 
   if (tokenSess && !from.name) {
-    const loading = ElLoading.service({
-      lock: true,
-      background: 'rgba(0, 0, 0, 0.7)',
-    });
+    showLoadingOverlay();
     await callegeStore.authUser();
-    loading.close();
+    hideLoadingOverlay();
   }
 
-  if (checkAvailableRoute(to.name, routes)) {
+  if (isAvailableRoute(to.name)) {
     callegeStore.setRouteHistory(to.name);
-    if (routeDashboard.includes(to.name)) {
-      if(callegeStore.tokenSess){
-        if (callegeStore.isVerif) {
-          if (to.name == 'subscribe' || to.name == 'confirmpayment') {
-            if (callegeStore.subscribeTime&&callegeStore.subscribeDuration &&callegeStore.totalSubscribePrice) {
-              next();
-            } 
-            else {
-              ElNotification({
-                title: 'Error',
-                message: 'Anda harus membuat request transaksi terlebih dahulu!',
-                type: 'error',
-              });
-              next({ name: 'profile' });
-            }
-          } 
-          else {
-            next();
-          }
-        }
-        else if(to.name == 'profile'){
-          next();
-        } else {
-          ElNotification({
-            title: 'Perhatian',
-            message: h('p', {
-              style: 'color:black;font-weight: bold;letter-spacing: 1px;',
-            }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
-            type: 'warning',
-          });
-          next({ name: 'profile' });
-        }
-      }else{
-        ElNotification({
-          title: 'Error',
-          message: h('p', {
-            style: 'color:black;font-weight: bold;letter-spacing: 1px;',
-          }, 'Anda harus login terlebih dahulu!'),
-          type: 'error',
-        });
-        next({ name: 'login' });
-      }
+    if (isDashboardRoute(to.name)) {
+      handleDashboardRoute(to, callegeStore, next);
     } else {
       next();
     }
   } else {
-    ElNotification({
-      title: 'Error',
-      message: h('p', {
-        style: 'color:black;font-weight: bold;letter-spacing: 1px;',
-      }, 'Page not found!'),
-      type: 'error',
-    });
-
-    const routeHistory = callegeStore.routeHistory;
-    next(routeHistory ? { name: routeHistory } : '/');
+    showNotFoundError();
+    redirectToPreviousRoute(callegeStore, next);
   }
 });
-
 router.afterEach(() => {
-  // Complete the animation of the route progress bar.
   NProgress.done()
 })
 
 export default router
+
+
+
+
+
+
+
+// router.beforeEach(async (to, from, next) => {
+//   const tokenSess = localStorage.getItem('tokenSess');
+//   const callegeStore = useCallegeStore();
+
+//   if (tokenSess && !from.name) {
+//     const loading = ElLoading.service({
+//       lock: true,
+//       background: 'rgba(0, 0, 0, 0.7)',
+//     });
+//     await callegeStore.authUser();
+//     loading.close();
+//   }
+
+//   if (checkAvailableRoute(to.name, routes)) {
+//     callegeStore.setRouteHistory(to.name);
+//     if (routeDashboard.includes(to.name)) {
+//       if(callegeStore.tokenSess){
+//         if (callegeStore.isVerif) {
+//           if (to.name == 'subscribe' || to.name == 'confirmpayment') {
+//             if (callegeStore.subscribeTime&&callegeStore.subscribeDuration &&callegeStore.totalSubscribePrice) {
+//               next();
+//             } 
+//             else {
+//               ElNotification({
+//                 title: 'Error',
+//                 message: 'Anda harus membuat request transaksi terlebih dahulu!',
+//                 type: 'error',
+//               });
+//               next({ name: 'profile' });
+//             }
+//           } 
+//           else {
+//             next();
+//           }
+//         }
+//         else if(to.name == 'profile'){
+//           next();
+//         } else {
+//           ElNotification({
+//             title: 'Perhatian',
+//             message: h('p', {
+//               style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+//             }, 'Tolong isi data diri anda terlebih dahulu sebelum anda dapat mengakses halaman lain!'),
+//             type: 'warning',
+//           });
+//           next({ name: 'profile' });
+//         }
+//       }else{
+//         ElNotification({
+//           title: 'Error',
+//           message: h('p', {
+//             style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+//           }, 'Anda harus login terlebih dahulu!'),
+//           type: 'error',
+//         });
+//         next({ name: 'login' });
+//       }
+//     } else {
+//       next();
+//     }
+//   } else {
+//     ElNotification({
+//       title: 'Error',
+//       message: h('p', {
+//         style: 'color:black;font-weight: bold;letter-spacing: 1px;',
+//       }, 'Page not found!'),
+//       type: 'error',
+//     });
+
+//     const routeHistory = callegeStore.routeHistory;
+//     next(routeHistory ? { name: routeHistory } : '/');
+//   }
+// });
