@@ -146,6 +146,9 @@ router.beforeEach(async (to, from, next) => {
           else {
             next();
           }
+        }
+        else if(to.name == 'profile'){
+          next();
         } else {
           ElNotification({
             title: 'Perhatian',
