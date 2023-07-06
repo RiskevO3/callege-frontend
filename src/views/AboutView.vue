@@ -1,17 +1,17 @@
 <template>
-    <div class="container mx-auto bg-white rounded-xl p-10">
+    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-10">
         <div class="flex flex-col pb-[50px]">
             <h1 class="font-bold text-2xl pb-[20px]">
                 Tentang Callege
             </h1>
-            <p class="text-lg text-justify pb-[20px]">
+            <p class="text-lg text-white dark:text-secondaryTextDark text-justify pb-[20px]">
                 Callege adalah platform inovatif yang menyediakan layanan video call
                 acak untuk
                 mahasiswa.
                 Dengan Callege, mahasiswa dapat terhubung dengan sesama mahasiswa di seluruh dunia secara acak, membuka
                 kesempatan untuk berbagi pengetahuan, ide, dan pengalaman. Dengan antarmuka yang sederhana dan aman.
             </p>
-            <p class="text-lg text-justify">
+            <p class="text-lg text-white dark:text-secondaryTextDark text-justify">
                 Callege memastikan pengalaman yang lancar dan interaktif. Platform ini
                 memungkinkan pengguna untuk menemukan teman baru, memperluas jaringan sosial, dan meningkatkan keterampilan
                 komunikasi. Bergabunglah dengan Callege dan temukan potensi baru melalui video call random yang menyenangkan
@@ -20,7 +20,7 @@
         </div>
         <div class="flex flex-col pt-[50px]">
             <h1 class="font-bold text-2xl pb-[30px]">Our Team</h1>
-            <p class="text-lg text-justify pb-[20px]">Business Analyst : Rivan Fauzan <br>
+            <p class="text-lg text-justify pb-[20px] text-white dark:text-secondaryTextDark">Business Analyst : Rivan Fauzan <br>
                 Product Designer : Herlin Priatna <br>
                 Software Engineer : <br>
                 1. Hamdan Azani <br>

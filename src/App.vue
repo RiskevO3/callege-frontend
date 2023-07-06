@@ -1,6 +1,8 @@
 <template>
-  <NavBar />
-  <RouterView />
+  <div class="bg-white dark:bg-bgDark text-black dark:text-white">
+    <NavBar />
+    <RouterView />
+  </div>
 </template>
 <script>
 import {RouterLink,RouterView} from 'vue-router'

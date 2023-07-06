@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto bg-white rounded-xl p-10">
+    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-10">
         <div class="flex flex-col pb-[30px] justify-center items-center">
             <h1 class="font-bold text-4xl pb-[30px]">Ada yang bisa kami bantu?</h1>
             <h2 class="font-bold text-xl">Pertanyaan Paling Sering</h2>

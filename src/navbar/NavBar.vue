@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-transparent">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-      <RouterLink to="/" class="flex items-center logoBrand" style="background-color: white">
+      <RouterLink to="/" class="flex items-center bg-transparent">
         <img
           src="../assets/resource/images/landing/logo.png"
           class="lg:h-16 md:h-12 sm:h-10 h-10 m-4"
@@ -16,7 +16,6 @@
         aria-expanded="false"
         @click="toggleNavbar"
       >
-        <span class="sr-only">Open main menu</span>
         <svg
           class="w-6 h-6"
           aria-hidden="true"
@@ -33,13 +32,13 @@
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
-          class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white"
+          class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 dark:border-bgDark text-gray-900 dark:text-white rounded-lg bg-gray-50 dark:bg-bgDark md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white"
         >
           <template v-if="isOnLanding">
             <li>
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
                 aria-current="page"
                 >Why Callege ?</a
               >
@@ -47,21 +46,21 @@
             <li>
               <a
                 href="#hero6"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
                 >Pricing</a
               >
             </li>
             <li>
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
                 >FAQ</a
               >
             </li>
             <li>
               <RouterLink
                 :to="isAuth ? '/dashboard' : '/login'"
-                class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:bg-primary md:px-7 md:py-2 md:text-white md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105"
+                class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:bg-primary bg-primary dark:bg-primaryDark md:px-7 md:py-2 md:text-white md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105"
               >
                 {{ isAuth ? 'Dashboard' : 'Login' }}
               </RouterLink>
@@ -71,7 +70,7 @@
             <li>
               <RouterLink
                 to="/dashboard/streaming"
-                class="py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
+                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem group-hover:text-white"
               >
                 <i class="fa-solid fa-house iconNav"></i>
                 <span class="navText"> Beranda</span>
@@ -80,7 +79,7 @@
             <li>
               <RouterLink
                 to="/dashboard/profile"
-                class="py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
+                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
               >
                 <i class="fa-solid fa-user iconNav"></i>
                 <span class="navText"> Profile</span>
@@ -89,7 +88,7 @@
             <li>
               <RouterLink
                 to="/dashboard/faq"
-                class="py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
+                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
               >
                 <i class="fa-solid fa-headset iconNav"></i>
                 <span class="navText"> Bantuan</span>
@@ -107,7 +106,7 @@
             <li>
               <RouterLink
                 to="/dashboard/about"
-                class="py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
+                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
               >
                 <i class="fa-solid fa-circle-info iconNav"></i>
                 <span class="navText"> Tentang</span>
@@ -115,10 +114,10 @@
             </li>
             <li>
               <button
-                class="logoutNav py-2 pl-5 pr-5 text-gray-900 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white"
+                class="bg-[#E02424] dark:bg-[#771D1D] py-2 pl-5 pr-5 rounded md:px-7 md:py-2 md:text-black md:dark:text-white md:rounded-full md:p-0 transition ease-in-out hover:scale-105 hover:text-white hover:bg-[#F05252] dark:hover:bg-[#9B1C1C]"
                 @click="logoutUser"
                 >
-                <i class="fa-solid fa-right-from-bracket"></i>
+                <i class="fa-solid fa-right-from-bracket hover:text-white"></i>
                 <span class="navText"> Keluar</span>
               </button>
             </li>
@@ -220,15 +219,6 @@ export default {
   color: #7668e3;
 }
 .navAitem:hover .iconNav {
-  color: white;
-}
-.logoutNav {
-  background-color: #7668e3;
-}
-.logoutNav:hover {
-  background-color: red;
-}
-.logoutNav:hover .iconNav {
   color: white;
 }
 .bg-sub .iconNav {
