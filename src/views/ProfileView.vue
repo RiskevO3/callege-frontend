@@ -41,13 +41,15 @@
                                 placeholder="" v-model="nama_panggilan" required>
                         </div>
                         <div>
-                            <label for="nama_lengkap"
-                                class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Nama
-                                Lengkap</label>
-                            <input type="text" id="nama_lengkap" name="nama_lengkap"
-                                class="bg-[#EEEFF0] border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
-                                placeholder="ex. James Wage Hamilton" :value="useCallegeStore().name" disabled>
+                            <label for="gender" class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Jenis
+                                Kelamin</label>
+                            <select id="gender" name="gender" v-model="gender"
+                                class="bg-white border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]">
+                                <option value="Laki-Laki" :selected="gender === 'Laki-Laki'">Laki-Laki</option>
+                                <option value="Perempuan" :selected="gender === 'Perempuan'">Perempuan</option>
+                            </select>
                         </div>
+
                         <div>
                             <label for="email" class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Alamat
                                 Email</label>
@@ -83,7 +85,7 @@
                     <div class="flex justify-center mt-12">
                         <button type="button"
                             class="transition-all border-2 border-purple-500 dark:border-[#5145CD] bg-purple-500 dark:bg-[#362F78] text-white focus:ring-4 focus:outline-none focus:ring-[#D5D0F7] font-medium rounded-xl text-lg w-full sm:w-auto px-8 py-3 text-center disabled:opacity-75 hover:scale-105 active:scale-90"
-                            @click="updateProfile" :disabled="!phone">
+                            @click="updateProfile" :disabled="!phone || !gender">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -100,6 +102,7 @@ import { ref } from 'vue';
 const router = useRouter()
 let nama_panggilan = useCallegeStore().shortName
 let phone = ref(useCallegeStore().phone)
+let gender = useCallegeStore().gender
 let premiumStatus = useCallegeStore().isPremium ? hitungTanggal(0, useCallegeStore().isPremium) : null
 function hitungTanggal(tambahanBulan, awaltanggal = null) {
     let tanggal;
@@ -136,7 +139,7 @@ function hitungTanggal(tambahanBulan, awaltanggal = null) {
     return output;
 }
 const updateProfile = () => {
-    if (nama_panggilan.length > 0 && phone) {
+    if (nama_panggilan.length > 0 && phone && gender.length > 0) {
         ElMessageBox.confirm(
             'Anda akan merubah informasi akun, lanjutkan?',
             'Warning',
@@ -150,6 +153,7 @@ const updateProfile = () => {
             .then(async () => {
                 useCallegeStore().shortName = nama_panggilan
                 useCallegeStore().phone = phone
+                useCallegeStore().gender = gender
                 let res = await useCallegeStore().updateUser();
                 if (res) {
                     router.push({ name: 'streaming' })

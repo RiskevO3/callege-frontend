@@ -6,11 +6,12 @@ export const useCallegeStore = defineStore('videochat', {
       ? localStorage.getItem('routeHistory')
       : null,
     sessionId: null,
-    roomToken: localStorage.getItem('roomToken')  ? localStorage.getItem('roomToken') : null,
+    roomToken: localStorage.getItem('roomToken') ? localStorage.getItem('roomToken') : null,
     tokenSess: localStorage.getItem('tokenSess') ? localStorage.getItem('tokenSess') : null,
     roomName: null,
     name: null,
     shortName: null,
+    gender: null,
     picture: null,
     phone: null,
     jurusan: null,
@@ -50,7 +51,8 @@ export const useCallegeStore = defineStore('videochat', {
         let res = await axios.post(`${this.ngrokUrl}/updateaccount`, {
           token: this.tokenSess,
           shortName: this.shortName,
-          phone: `0${this.phone}`
+          phone: `0${this.phone}`,
+          gender: this.gender
         })
         if (res.data.success) {
           this.isVerif = true
@@ -79,6 +81,7 @@ export const useCallegeStore = defineStore('videochat', {
             this.jurusan = response.data.jurusan
             this.universitas = response.data.universitas
             this.phone = response.data.phone
+            this.gender = response.data.gender
             return true
           } else {
             this.tokenSess = null
@@ -128,32 +131,29 @@ export const useCallegeStore = defineStore('videochat', {
           } else {
             return false
           }
-        }
-        else{
+        } else {
           return false
         }
       } catch {
         return false
       }
     },
-    async getRoomSession(){
-      if(this.tokenSess && this.roomToken){
-        try{
-          let res = await axios.post(`${this.ngrokUrl}/getroomsession`,{
+    async getRoomSession() {
+      if (this.tokenSess && this.roomToken) {
+        try {
+          let res = await axios.post(`${this.ngrokUrl}/getroomsession`, {
             headers: { 'ngrok-skip-browser-warning': true },
             session_token: this.tokenSess,
             room_token: this.roomToken
           })
-          if(res.data.success){
+          if (res.data.success) {
             this.roomName = res.data.room_name
             return true
           }
-        }
-        catch{
+        } catch {
           return false
         }
-      }
-      else{
+      } else {
         return false
       }
     },
@@ -172,7 +172,7 @@ export const useCallegeStore = defineStore('videochat', {
         return false
       }
     },
-    async makeTransaction(){
+    async makeTransaction() {
       try {
         let response = await axios.post(`${this.ngrokUrl}/maketransaction`, {
           token: this.tokenSess,
@@ -183,37 +183,34 @@ export const useCallegeStore = defineStore('videochat', {
         })
         if (response.data.success) {
           return response.data
-        }
-        else{
+        } else {
           return false
         }
       } catch (error) {
         return false
       }
     },
-    async refreshPaymentStatus(transactionId){
+    async refreshPaymentStatus(transactionId) {
       try {
         let response = await axios.post(`${this.ngrokUrl}/refreshpaymentstatus`, {
           token: this.tokenSess,
           transaction_id: transactionId
         })
-        if (response.data.success){
-            return true
-        }
-        else{
+        if (response.data.success) {
+          return true
+        } else {
           return false
         }
       } catch (error) {
         return false
       }
     },
-    async clearToken(){
+    async clearToken() {
       this.tokenSess = null
       localStorage.removeItem('tokenSess')
     }
   }
 })
-
 
 // async leaveWebsite() {
 //   try {
@@ -229,7 +226,7 @@ export const useCallegeStore = defineStore('videochat', {
 //             this.roomToken = null
 //           }
 //         })
-//     } 
+//     }
 //     else {
 //     }
 //   } catch {
