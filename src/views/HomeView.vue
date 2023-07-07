@@ -292,7 +292,7 @@
                                         Mulai Sekarang
                                     </RouterLink>
                                     <RouterLink to="/dashboard/subscribe"
-                                        class="inline-block text-sm font-semibold text-white border border-white dark:border-primary border-t-2 bg-primary mx-auto py-4 px-10 md:text-base rounded-[20px] hover:shadow-lg hover:bg-sub transition ease-in-out hover:scale-110">
+                                        class="inline-block text-sm font-bold text-white border border-white dark:border-primary border-t-2 bg-primary mx-auto py-4 px-10 md:text-base rounded-[20px] hover:shadow-lg hover:bg-sub transition ease-in-out hover:scale-110">
                                         Langganan
                                     </RouterLink>
                                 </div>

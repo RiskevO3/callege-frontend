@@ -72,7 +72,7 @@
             </div>
             <div class="flex flex-wrap justify-center items-center pb-8">
                 <button
-                    class="flex flex-col justify-center items-center mr-4 rounded-xl py-2 px-4 bg-white max-w-[400px] w-full border-2 border-[#D5D0F7] shadow transition hover:scale-105">
+                    class="flex flex-col justify-center items-center mr-4 rounded-xl dark:text-gray-800 py-2 px-4 bg-white max-w-[400px] w-full border-2 border-[#D5D0F7] shadow transition hover:scale-105">
                     <span>
                         <i class="fa-solid fa-phone-volume"></i>
                     </span>
@@ -92,13 +92,13 @@
     </div>
 </template>
 <script>
-export default{
-    name:'FaqView',
-    mounted(){
+export default {
+    name: 'FaqView',
+    mounted() {
         this.dropdown();
     },
-    methods:{
-        dropdown(){
+    methods: {
+        dropdown() {
             const dropdownTrigger = document.querySelectorAll('.dropdown-trigger');
             dropdownTrigger.forEach((trigger) => {
                 const dropdownContent = trigger.nextElementSibling;
