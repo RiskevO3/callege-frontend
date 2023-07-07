@@ -107,7 +107,7 @@ export default {
                 this.$router.push({ name: 'profile' })
                 ElNotification({
                   title: 'Success',
-                  message: h('p', { style: 'color:black;font-weight:bold;letter-spacing: 1px;' }, `Selamat Datang ${res['name']}!`),
+                  message: h('p', { style: 'font-weight:bold;letter-spacing: 1px;' }, `Selamat Datang ${res['name']}!`),
                   type: 'success'
                 })
                 if (this.loading) {
@@ -117,7 +117,7 @@ export default {
               } else {
                 ElNotification({
                   title: 'Error',
-                  message: h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Autentikasi Gagal!'),
+                  message: h('p', { style: 'font-weight: bold;letter-spacing: 1px;' }, 'Autentikasi Gagal!'),
                   type: 'error'
                 })
                 if (this.loading) {
@@ -129,7 +129,7 @@ export default {
             else {
               ElNotification({
                 title: 'Error',
-                message: h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Login Gagal!'),
+                message: h('p', { style: 'font-weight: bold;letter-spacing: 1px;' }, 'Login Gagal! Gunakan akun kampus pribadi Anda!'),
                 type: 'error'
               })
               if (this.loading) {

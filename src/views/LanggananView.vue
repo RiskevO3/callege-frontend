@@ -1,91 +1,62 @@
 <template>
-  <div class="bg-[#EBE8FB] pb-24">
-    <div>
-      <div class="flex items-center flex-col"></div>
-      <div class="flex justify-between border-2 mx-48 mt-12">
+  <section class="bg-[#EBE8FB] dark:bg-[#1b2538] h-full" style="height: 90vh;">
+    <div class="flex flex-col items-center justify-center py-2">
+      <div class="flex justify-between mx-48 mt-12">
         <div
-          class="block w-[650px] p-6 h-[365px] bg-white border border-gray-200 rounded-lg shadow"
-        >
-          <h5 class="mb-2 font-family-[roboto] text-lg font-bold tracking-tight text-black">
+          class="block w-[650px] p-6 h-[365px] bg-white dark:bg-primaryCardDark border border-gray-300 dark:border-gray-700  rounded-lg shadow-lg">
+          <h5 class="mb-2 font-family-[roboto] text-lg font-bold tracking-tight text-black dark:text-white">
             Package Premium Callege {{ subscribeTime }} Bulan
           </h5>
           <p class="font-normal text-black dark:text-gray-400">
             Paket aktif hingga {{ subscribeDuration }}
           </p>
-          <p class="mt-4 font-bold text-black dark:text-gray-400">Detail Paket</p>
+          <p class="mt-4 font-bold text-black dark:text-gray-100">Detail Paket</p>
           <p class="font-normal text-black dark:text-gray-400">Paket sudah termasuk</p>
           <ul role="list" class="space-y-5 my-7 ml-3">
             <li class="flex space-x-3">
               <!-- Icon -->
-              <svg
-                aria-hidden="true"
-                class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <title>Check icon</title>
-                <path
-                  fill-rule="evenodd"
+                <path fill-rule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"
-                ></path>
+                  clip-rule="evenodd"></path>
               </svg>
-              <span class="text-base font-normal leading-tight text-black dark:text-gray-400"
-                >Fitur chat</span
-              >
+              <span class="text-base font-normal leading-tight text-black dark:text-gray-400">Fitur chat</span>
             </li>
             <li class="flex space-x-3">
               <!-- Icon -->
-              <svg
-                aria-hidden="true"
-                class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <title>Check icon</title>
-                <path
-                  fill-rule="evenodd"
+                <path fill-rule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"
-                ></path>
+                  clip-rule="evenodd"></path>
               </svg>
-              <span class="text-base font-normal leading-tight text-black dark:text-gray-400"
-                >Filter pencarian berdasarkan jenis kelamin, jurusan, universitas, dan topik</span
-              >
+              <span class="text-base font-normal leading-tight text-black dark:text-gray-400">Filter pencarian berdasarkan
+                jenis kelamin, jurusan, universitas, dan topik</span>
             </li>
             <li class="flex space-x-3">
               <!-- Icon -->
-              <svg
-                aria-hidden="true"
-                class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-[#82CD47] dark:text-blue-500" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <title>Check icon</title>
-                <path
-                  fill-rule="evenodd"
+                <path fill-rule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"
-                ></path>
+                  clip-rule="evenodd"></path>
               </svg>
-              <span class="text-base font-normal leading-tight text-black dark:text-gray-400"
-                >Bebas iklan</span
-              >
+              <span class="text-base font-normal leading-tight text-black dark:text-gray-400">Bebas iklan</span>
             </li>
           </ul>
           <div class="flex items-center justify-between">
-            <p class="mt-4 font-bold text-black dark:text-gray-400">Detail Paket</p>
-            <p class="mt-4 font-bold text-[#F45050] dark:text-gray-400">
+            <p class="mt-4 font-bold text-black dark:text-gray-200">Detail Paket</p>
+            <p class="mt-4 font-bold text-[#F45050] dark:text-gray-200">
               Rp {{ totalPrice.toLocaleString('id-ID') }}
             </p>
           </div>
         </div>
         <div
-          class="w-[400px] p-6 ml-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-        >
+          class="w-[400px] p-6 ml-3 bg-white border border-gray-00 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700">
           <h5 class="mb-2 text-lg font-bold tracking-tight text-black dark:text-white">
             Detail Pembayaran
           </h5>
@@ -101,17 +72,12 @@
             Kode Promo
           </h5>
           <div class="mt-5 flex items-center justify-between">
-            <input
-              v-model="promoCode"
+            <input v-model="promoCode"
               class="mr-4 bg-white border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              placeholder="Masukkan kode promo"
-              required
-            />
-            <button
-              type="button"
+              placeholder="Masukkan kode promo" required />
+            <button type="button"
               class="text-white bg-[#7868E6] hover:bg-[#574aab] focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 inline-flex justify-center w-36 py-4 text-center"
-              @click="cekKode"
-            >
+              @click="cekKode">
               Cek Kode
             </button>
           </div>
@@ -121,27 +87,26 @@
           </div>
           <hr class="mt-5 border-black" />
           <div class="mt-5 flex items-center justify-between">
-            <p class="font-bold text-black dark:text-gray-400">TOTAL</p>
-            <p class="font-bold text-black dark:text-gray-400">
+            <p class="font-bold text-black dark:text-gray-200">TOTAL</p>
+            <p class="font-bold text-black dark:text-gray-200">
               RP {{ totalPrice.toLocaleString() }}
             </p>
           </div>
           <button
             class="w-full mt-4 flex justify-center items-center px-3 py-4 text-sm font-medium text-center text-white bg-[#7868E6] rounded-full hover:bg-[#574aab] focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            @click="confirmPayment"
-          >
+            @click="confirmPayment">
             Pilih Metode Pembayaran
           </button>
-          <p class="mt-4 text-sm font-normal text-black dark:text-gray-400">
+          <p class="mt-4 text-sm font-normal text-justify text-black dark:text-gray-300">
             Dengan mengklik tombol di atas, kamu menyatakan telah membaca, memahami dan menyetujui
             <a href="#">
-              <span class="text-[#574aab] text-sm font-normal"> Kebijakan Pembayaran </span>
+              <span class="text-[#574aab] text-sm font-normal"> Kebijakan Pembayaran. </span>
             </a>
           </p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 <!-- <script setup>
 import { useCallegeStore } from '../stores/callege';

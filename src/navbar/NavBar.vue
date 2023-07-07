@@ -18,24 +18,24 @@
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
-          class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 dark:border-bgDark text-gray-900 dark:text-white rounded-lg bg-gray-50 dark:bg-bgDark md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
+          class="font-medium flex flex-col px-4 md:px-8 lg:px-12 md:p-0 mt-4 border border-gray-100 dark:border-bgDark text-gray-900 dark:text-white rounded-lg bg-gray-50 dark:bg-bgDark md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
           <template v-if="isOnLanding">
             <li>
               <a href="#hero4"
-                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
+                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900 hover:bg-gray-100 md:hover:dark:text-white md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105"
                 aria-current="page">Why Callege ?</a>
             </li>
             <li>
               <a href="#hero6"
-                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105">Pricing</a>
+                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:dark:text-white md:border-0 md:p-0 transition hover:scale-105">Pricing</a>
             </li>
             <li>
               <a href="#"
-                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 transition hover:scale-105">FAQ</a>
+                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:dark:text-gray-900  hover:bg-gray-100 md:hover:bg-transparent md:hover:dark:text-white md:border-0 md:p-0 transition hover:scale-105">FAQ</a>
             </li>
             <li>
               <RouterLink :to="isAuth ? '/dashboard' : '/login'"
-                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:bg-gray-100 hover:dark:text-gray-900 md:bg-primary md:px-7 md:py-2 md:text-white md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105">
+                class="block py-2 pl-3 pr-4 text-gray-900 dark:text-white rounded hover:bg-gray-100 hover:dark:text-gray-900 md:bg-primary md:px-7 md:py-2 md:text-white md:hover:dark:text-white md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105">
                 {{ isAuth ? 'Dashboard' : 'Login' }}
               </RouterLink>
             </li>

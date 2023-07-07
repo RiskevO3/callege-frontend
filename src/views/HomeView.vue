@@ -194,7 +194,7 @@
                             data-aos="zoom-in-right" data-aos-duration="1500" data-aos-once="true">
                             <div class="pb-[20px]">
                                 <h1 class="font-bold text-base text-white pt-[78px] pb-[10px] md:text-xl">Free</h1>
-                                <p class="text-sm text-gray-800 dark:text-secondaryTextDark md:text-base">
+                                <p class="text-sm text-white dark:text-secondaryTextDark md:text-base">
                                     Gratis penggunaan untuk kamu yang suka
                                     gratisan
                                 </p>

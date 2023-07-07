@@ -22,7 +22,7 @@
                     </div>
                     <div class="items-center text-base font-semibold text-gray-900 dark:text-white">
                         <button
-                            class="transition-all border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white text-lg hover:bg-[#DC4848] focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2  hover:scale-105 active:scale-90"
+                            class="transition-all border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white text-lg hover:bg-primary hover:text-white focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2  hover:scale-105 active:scale-90"
                             @click="openSubscribe">
                             Langganan
                         </button>
