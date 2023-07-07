@@ -1,4 +1,4 @@
-import './assets/css/main.css'
+import './index.css'
 import '../node_modules/nprogress/nprogress.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -11,6 +11,7 @@ import vue3GoogleLogin from 'vue3-google-login'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 
