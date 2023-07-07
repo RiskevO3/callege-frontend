@@ -1,38 +1,32 @@
 <template>
-  <div class="lg:grid lg:grid-cols-2" style="min-height: 100vh">
-    <div class="p-8 md:p-14 hidden lg:block">
-      <!-- Content for grid 1 on desktop -->
-      <!-- <div class="flex justify-start items-start mb-6 md:mb-20 px-4 md:px-10">
-            </div> -->
-      <div class="flex justify-center mb-6 md:mb-10">
-        <img
-          src="../assets/resource/images/login/customerlogin.png"
-          class="w-75p h-auto lg:w-96 lg:h-362"
-          alt=""
-        />
+  <div class="container mx-auto max-w-[1440px]">
+    <div class=" flex flex-col my-auto lg:grid lg:grid-cols-2">
+
+      <!-- Konten untuk bagian kiri -->
+      <div class="p-8 md:p-14 hidden lg:block">
+        <div class="flex justify-center mb-6 md:mb-10">
+          <img src="../assets/resource/images/login/customerlogin.png" class="w-75p h-auto lg:w-96 lg:h-362" alt="" />
+        </div>
+        <div class="px-4 md:px-10">
+          <h1 class="text-2xl md:text-4xl font-gotham font-semibold pb-2 md:pb-5">
+            Welcome {{ isLogin ? 'Back!' : '!' }}
+          </h1>
+          <p class="text-base lg:text-lg dark:text-secondaryTextDark font-gotham">
+            Mulai eksplorasi dan jangkau relasimu lebih luas lagi sekarang juga bersama Callege.
+          </p>
+        </div>
       </div>
-      <div class="px-4 md:px-10">
-        <h1 class="text-2xl md:text-4xl font-gotham font-semibold pb-2 md:pb-5">
-          Welcome {{ isLogin ? 'Back!' : '!' }}
-        </h1>
-        <p class="text-base md:text-lg font-gotham">
-          Mulai eksplorasi dan jangkau relasimu lebih luas lagi sekarang juga bersama Callege.
-        </p>
-      </div>
-    </div>
-    <div>
+
       <!-- Konten untuk bagian kanan -->
-      <div class="flex justify-center items-center py-8 px-4 md:px-6 lg:px-8 xl:px-10">
-        <div class="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0">
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8" style="background-color: #f2f0fd">
+      <div class="flex justify-center items-center py-8 px-4 md:px-6 lg:px-8">
+        <div class="w-full bg-blue rounded-lg shadow sm:max-w-md xl:p-0">
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8 bg-white dark:bg-primaryCardDark">
             <div class="flex justify-end items-center mb-14">
-              <h1 class="text-sm ml-4 pr-2"><b>{{ isLogin ? 'Belum' : 'Sudah' }} punya akun?</b></h1>
+              <h1 class="text-sm font-light ml-4 pr-2"><b>{{ isLogin ? 'Belum' : 'Sudah' }} punya akun ?</b></h1>
               <div>
                 <button
-                  class="bg-primary text-white px-7 py-3 rounded-full hover:bg-sub transition delay-100"
-                  style="color: white"
-                  @click="switchLogin"
-                >
+                  class="bg-primary text-white text-sm px-7 py-3 rounded-full md:text-base hover:bg-sub transition delay-100"
+                  style="color: white" @click="switchLogin">
                   {{ isLogin ? 'Daftar' : 'Masuk' }}
                 </button>
               </div>
@@ -41,7 +35,7 @@
               <h1 class="text-2xl md:text-4xl font-bold font-gotham">
                 {{ isLogin ? 'Masuk' : 'Daftar' }}
               </h1>
-              <p class="text-sm font-gotham" style="margin-bottom: 55px">
+              <p class="text-sm font-gotham dark:text-secondaryTextDark" sty-le="margin-bottom: 55px">
                 Silakan {{ isLogin ? 'masuk' : 'daftar' }} dengan menggunakan akun email SSO atau
                 akun kampus yang Anda punya.
               </p>
@@ -49,21 +43,16 @@
                 <button
                   class="flex items-center justify-start px-7 py-2 rounded-full w-full text-primary text-center text-sm font-bold font-gotham transition delay-100"
                   style="background-color: #ebe8fb; transition: background-color 0.3s"
-                  onmouseover="this.style.backgroundColor='#E3E1F0';"
-                  onmouseout="this.style.backgroundColor='#EBE8FB';"
-                  @click="Login"
-                >
-                  <img
-                    src="../assets/resource/images/login/google.png"
-                    alt="Google Logo"
-                    style="width: 35px; height: 35px; margin-right: 25px"
-                  />
+                  onmouseover="this.style.backgroundColor='#E3E1F0';" onmouseout="this.style.backgroundColor='#EBE8FB';"
+                  @click="Login">
+                  <img src="../assets/resource/images/login/google.png" alt="Google Logo"
+                    style="width: 35px; height: 35px; margin-right: 25px" />
                   {{ isLogin ? 'Masuk' : 'Daftar' }} dengan Gmail
                 </button>
               </div>
-              <p class="text-sm font-light text-gray-700 justify-center text-center">
+              <p class="text-sm font-light text-gray-700 dark:text-secondaryTextDark justify-center text-center">
                 Dengan masuk, Anda menyetujui
-                <a href="#" class="font-bold" style="color: #2a2451">
+                <a href="#" class="font-bold text-[#2a2451] dark:text-primary">
                   Ketentuan Layanan dan Kebijakan Privasi
                 </a>
                 dari Callege.
@@ -75,8 +64,9 @@
     </div>
   </div>
 </template>
+
 <script>
-import { ElMessage, ElMessageBox, ElNotification,ElLoading } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification, ElLoading } from 'element-plus'
 import { h } from 'vue'
 import { useCallegeStore } from '../stores/callege'
 import { googleAuthCodeLogin } from 'vue3-google-login'
@@ -85,7 +75,7 @@ export default {
   data() {
     return {
       login: false,
-      loading:null
+      loading: null
     }
   },
   computed: {
@@ -117,35 +107,35 @@ export default {
                 this.$router.push({ name: 'profile' })
                 ElNotification({
                   title: 'Success',
-                  message:h('p', { style: 'color:black;font-weight:bold;letter-spacing: 1px;' }, `Selamat Datang ${res['name']}!`),
+                  message: h('p', { style: 'color:black;font-weight:bold;letter-spacing: 1px;' }, `Selamat Datang ${res['name']}!`),
                   type: 'success'
                 })
-                if(this.loading){
+                if (this.loading) {
                   this.loading.close()
                   this.loading = null
                 }
               } else {
                 ElNotification({
                   title: 'Error',
-                  message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Autentikasi Gagal!'),
+                  message: h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Autentikasi Gagal!'),
                   type: 'error'
                 })
-                if(this.loading){
+                if (this.loading) {
                   this.loading.close()
                   this.loading = null
                 }
               }
-            } 
+            }
             else {
               ElNotification({
                 title: 'Error',
-                message:h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' },'Login Gagal!'),
+                message: h('p', { style: 'color:black;font-weight: bold;letter-spacing: 1px;' }, 'Login Gagal!'),
                 type: 'error'
               })
-              if(this.loading){
-                  this.loading.close()
-                  this.loading = null
-                }
+              if (this.loading) {
+                this.loading.close()
+                this.loading = null
+              }
             }
           })
         })
