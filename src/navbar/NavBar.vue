@@ -1,6 +1,7 @@
 <template>
-  <nav class="bg-transparent">
-    <div class="flex flex-wrap items-center justify-between ">
+  <nav class="bg-transparent static dark:bg-bgDark md:static w-full z-10">
+    <div class="flex flex-wrap items-center my-2 md:my-4 lg:my-2"
+      :class="{ 'flex': true, 'justify-between md:justify-center md:flex-col text-sm lg:text-base lg:flex-row': isDashboard, 'justify-between': !isDashboard }">
       <RouterLink to="/" class="flex items-center logoBrand bg-white dark:bg-bgDark">
         <img src="../assets/resource/images/landing/logo.png"
           class="lg:h-16 md:h-12 sm:h-10 h-10 m-4 px-4 md:px-8 lg:px-12" alt="Flowbite Logo" />
@@ -18,7 +19,7 @@
       </button>
       <div class="hidden w-full md:block md:w-auto" id="navbar-default">
         <ul
-          class="font-medium flex flex-col px-4 md:px-8 lg:px-12 md:p-0 mt-4 border border-gray-100 dark:border-bgDark text-gray-900 dark:text-white rounded-lg bg-gray-50 dark:bg-bgDark md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
+          class="font-medium flex flex-col px-4 md:px-8 lg:px-12 md:p-0 mt-4 text-sm space-y-2 md:space-y-0 lg:text-base border border-gray-100 dark:border-bgDark text-gray-900 dark:text-white rounded-lg bg-gray-50 dark:bg-bgDark md:items-center md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
           <template v-if="isOnLanding">
             <li>
               <a href="#hero4"
@@ -42,25 +43,31 @@
           </template>
           <template v-if="isDashboard">
             <li>
-              <RouterLink to="/dashboard/streaming"
-                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem group-hover:text-white">
-                <i class="fa-solid fa-house iconNav"></i>
-                <span class="navText"> Beranda</span>
-              </RouterLink>
+              <button class="w-full text-left md:text-center">
+                <RouterLink to="/dashboard/streaming"
+                  class="block py-2 pl-5 pr-5 rounded md:px-7 md:py-2 text-black dark:text-white hover:bg-gray-400 md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
+                  <i class="fa-solid fa-house iconNav"></i>
+                  <span class="navText"> Beranda</span>
+                </RouterLink>
+              </button>
             </li>
             <li>
-              <RouterLink to="/dashboard/profile"
-                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
-                <i class="fa-solid fa-user iconNav"></i>
-                <span class="navText"> Profile</span>
-              </RouterLink>
+              <button class="w-full text-left md:text-center">
+                <RouterLink to="/dashboard/profile"
+                  class="block py-2 pl-5 pr-5 rounded md:px-7 md:py-2 text-black dark:text-white hover:bg-gray-400 md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
+                  <i class="fa-solid fa-user iconNav mr-1 md:mr-0"></i>
+                  <span class="navText"> Profile</span>
+                </RouterLink>
+              </button>
             </li>
             <li>
-              <RouterLink to="/dashboard/faq"
-                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
-                <i class="fa-solid fa-headset iconNav"></i>
-                <span class="navText"> Bantuan</span>
-              </RouterLink>
+              <button class="w-full text-left md:text-center">
+                <RouterLink to="/dashboard/faq"
+                  class="block py-2 pl-5 pr-5 rounded md:px-7 md:py-2 text-black dark:text-white hover:bg-gray-400 md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
+                  <i class="fa-solid fa-headset iconNav"></i>
+                  <span class="navText"> Bantuan</span>
+                </RouterLink>
+              </button>
             </li>
             <!-- <li>
               <RouterLink
@@ -72,15 +79,17 @@
               </RouterLink>
             </li> -->
             <li>
-              <RouterLink to="/dashboard/about"
-                class="py-2 pl-5 pr-5 rounded hover:bg-gray-100 md:px-7 md:py-2 md:text-black md:dark:text-white md:hover:bg-sub sm:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
-                <i class="fa-solid fa-circle-info iconNav"></i>
-                <span class="navText"> Tentang</span>
-              </RouterLink>
+              <button class="w-full text-left md:text-center">
+                <RouterLink to="/dashboard/about"
+                  class="block py-2 pl-5 pr-5 rounded md:px-7 md:py-2 text-black dark:text-white hover:bg-gray-400 md:hover:bg-sub md:rounded-full md:p-0 transition ease-in-out hover:scale-105 navAitem hover:text-white">
+                  <i class="fa-solid fa-circle-info iconNav"></i>
+                  <span class="navText"> Tentang</span>
+                </RouterLink>
+              </button>
             </li>
             <li>
               <button
-                class="bg-[#E02424] dark:bg-[#771D1D] py-2 pl-5 pr-5 rounded md:px-7 md:py-2 md:text-black md:dark:text-white md:rounded-full md:p-0 transition ease-in-out hover:scale-105 hover:text-white hover:bg-[#F05252] dark:hover:bg-[#9B1C1C]"
+                class="block w-full text-left bg-[#E02424] dark:bg-[#771D1D] py-2 pl-5 pr-5 rounded md:px-7 md:py-2 md:text-black md:text-center md:dark:text-white md:rounded-full md:p-0 transition ease-in-out hover:scale-105 hover:text-white hover:bg-[#F05252] dark:hover:bg-[#9B1C1C]"
                 @click="logoutUser">
                 <i class="fa-solid fa-right-from-bracket hover:text-white"></i>
                 <span class="navText"> Keluar</span>

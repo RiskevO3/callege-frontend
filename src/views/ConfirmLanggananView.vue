@@ -3,23 +3,24 @@
     <div class="flex flex-col items-center justify-center py-2">
       <div class="text-lg flex my-10 justify-center space-x-5">
         <div
-          class="block w-[500px] p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <h5 class="mb-2 font-family-[roboto] text-lg font-bold tracking-tight text-black dark:text-white">
+          class="flex flex-col w-full mx-5 md:mx-auto md:max-w-[500px] p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <h5
+            class="mb-2 font-family-[roboto] text-base md:text-md lg:text-lg font-bold tracking-tight text-black dark:text-white">
             Package Premium Callege {{ totalBulan }} Bulan
           </h5>
-          <p class="font-normal text-base text-black dark:text-gray-400">
+          <p class="font-normal text-sm md:text-base text-black dark:text-gray-400">
             Berlaku sampai tanggal {{ totalDuration }}
           </p>
           <hr class="mt-5 border-black" />
           <hr />
           <template v-if="!onPaymentStatus">
-            <p class="mt-4 font-normal text-base text-black dark:text-gray-200">
+            <p class="mt-4 font-normal text-sm md:text-base text-black dark:text-gray-200">
               Total harga yang harus dibayar
             </p>
-            <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-200">
+            <p class="mt-2 font-bold text-sm md:text-base text-[#F45050] dark:text-gray-200">
               RP {{ totalPayment.toLocaleString('id-ID') }}
             </p>
-            <p class="text-sm text-justify text-gray-400">
+            <p class="text-sm mt-2 text-justify text-gray-400">
               *Total pembayaran diatas adalah estimasi harga yang harus dibayar, harga dapat berubah sesuai dengan harga
               yang tertera pada payment setelah ini
             </p>
@@ -64,7 +65,7 @@
                 </button>
               </li>
             </ul>
-            <p class="mt-4 font-bold text-base text-black dark:text-gray-400">E-Wallet</p>
+            <p class="mt-4 font-bold text-base text-black dark:text-white">E-Wallet</p>
             <ul role="list" class="space-y-5 my-4 ml-3">
               <li class="flex space-x-3">
                 <!-- Icon -->
@@ -93,37 +94,38 @@
                 <img class="w-11" :src="`../src/assets/resource/images/payment/${selectImagePayment}`" /><img />
                 <div class="pl-0 text-sm font-normal capitalize">{{ select }}</div>
               </div>
-              <p class="mt-4 font-normal text-base text-black dark:text-gray-200">
+              <p class="mt-4 font-normal text-sm md:text-base text-black dark:text-gray-200">
                 Total harga yang harus dibayar
               </p>
-              <p class="mt-2 font-bold text-base text-[#F45050] dark:text-gray-300">Rp. {{
+              <p class="mt-2 font-bold text-sm md:text-base text-[#F45050] dark:text-gray-300">Rp. {{
                 totalPay.toLocaleString('id-ID')
               }}</p>
               <hr class="mt-5 border-black" />
               <hr />
-              <p class="mt-4 font-regular text-base text-black dark:text-gray-200">
+              <p class="mt-4 font-regular text-sm md:text-base text-black dark:text-gray-200">
                 Sisa Waktu Pembayaran:
               </p>
-              <p class="text-center font-bold text-[#ffb83c] bg-red-500 rounded dark:text-white">
+              <p
+                class="mt-2 text-sm md:text-base text-center font-bold text-[#ffb83c] bg-red-500 rounded dark:text-white">
                 {{ formattedCountdown }}
               </p>
               <template v-if="!(selected == 'qris')">
-                <p class="mt-4 font-regular text-base text-black dark:text-gray-200">
+                <p class="mt-4 font-regular text-sm md:text-base text-black dark:text-gray-200">
                   No. Virtual Account
                 </p>
-                <p class="mt-4 font-bold font-regular text-base text-black dark:text-gray-300">
+                <p class="mt-4 font-bold font-regular text-sm md:text-base text-black dark:text-gray-300">
                   {{ paymentNumber }}
                   <i class="fa-solid fa-copy hover:text-[#7668e3] pr-0" @click="copyToClipboard(paymentNumber)">
                   </i>
                 </p>
               </template>
               <template v-else>
-                <div class="my-2 font-bold text-center text-white content-center">
-                  <p class="mb-2 font-regular text-base text-black dark:text-gray-200">
+                <div class="my-2 font-bold text-sm md:text-base text-center text-white content-center">
+                  <p class="mb-2 font-regular text-sm md:text-base text-black dark:text-gray-200">
                     Harap Scan QRIS dibawah ini untuk melakukan pembayaran
                   </p>
-                  <figure class="w-full">
-                    <vue-qrcode :value="paymentNumber" :options="{ width: 450 }"></vue-qrcode>
+                  <figure class="flex w-full justify-center items-center text-center">
+                    <vue-qrcode :value="paymentNumber"></vue-qrcode>
                   </figure>
                 </div>
               </template>

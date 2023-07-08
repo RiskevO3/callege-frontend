@@ -1,14 +1,14 @@
 <template>
-  <div class="container mx-auto rounded-xl p-10 bg-[#eae8fa] dark:bg-[#1F2937]">
-    <div class="flex p-4">
-      <div class="w-1/2 pr-4">
+  <div class="container mx-auto rounded-xl p-5 md:p-10 bg-[#eae8fa] dark:bg-[#1F2937]">
+    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 p-2 md:p-4">
+      <div class="md:w-1/2 pr-4">
         <!-- First Video Content -->
         <div class="bg-gray-200 dark:bg-[#374151] h-[500px] w-full rounded-3xl">
           <div ref="localVideo" class="video-container">
           </div>
         </div>
       </div>
-      <div class="w-1/2 pr-4" v-loading="loadingPartner" :element-loading-text="loadingText"
+      <div class="md:w-1/2 pr-4" v-loading="loadingPartner" :element-loading-text="loadingText"
         element-loading-background="black">
         <!-- Second Video Content -->
         <div class="bg-gray-200 dark:bg-[#374151] h-[500px] w-full rounded-3xl">
@@ -19,10 +19,10 @@
       </div>
     </div>
     <div class="p-[10px] mx-auto bg-white dark:bg-[#374151] rounded-lg">
-      <ul class="flex justify-center gap-4">
+      <ul class="flex flex-wrap justify-center gap-2 md:gap-4">
         <li>
           <button @click="callHandle"
-            class="text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-purple-500 dark:bg-[#362F78] text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
+            class="flex text-base md:text-md lg:text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-purple-500 dark:bg-[#362F78] text-white px-4 py-2  items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
             :disabled="loadingPartner">
             <i :class="{ 'fas fa-play': callEnded, 'fa-solid fa-forward': !callEnded }"></i>
             {{ !callEnded ? 'Skip' : 'Mulai' }}
@@ -30,7 +30,7 @@
         </li>
         <li>
           <button
-            class="text-lg border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
+            class="flex text-base md:text-md lg:text-lg border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white px-4 py-2 items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
             @click="stopCall" :disabled="callEnded">
             <i class="fa-solid fa-stop"></i>
             Stop
@@ -38,14 +38,14 @@
         </li>
         <li>
           <button
-            class="text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white  text-lg px-4 py-2  items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
+            class="text-base md:text-md lg:text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white px-4 py-2  items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
             @click="toggleMute" :disabled="callEnded">
             <i class="fa-solid" :class="{ 'fa-microphone': !isAudioMuted, 'fa-microphone-slash': isAudioMuted }"></i>
           </button>
         </li>
         <li>
           <button
-            class="text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
+            class="flex text-base md:text-md lg:text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white px-4 py-2 items-center gap-2 rounded-2xl hover:scale-105 active:scale-90 disabled:opacity-50"
             :disabled="callEnded">
             <i class="fa-solid fa-triangle-exclamation"></i>
             Report User
@@ -53,13 +53,15 @@
         </li>
         <li>
           <button type="button" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-            class="text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white text-lg px-4 py-2 flex items-center gap-2 rounded-2xl hover:scale-105 active:scale-90">
+            class="flex text-base md:text-md lg:text-lg border-2 border-purple-500 dark:border-[#5145CD] bg-white dark:bg-[#362F78] text-purple-500 dark:text-white px-4 py-2 = items-center gap-2 rounded-2xl hover:scale-105 active:scale-90">
             <i class="fa-solid fa-filter"></i>
             Options
           </button>
         </li>
       </ul>
     </div>
+
+    <!-- INI BUAT APA BANG ? -->
     <Transition>
       <!-- Main modal -->
       <div id="defaultModal" tabindex="-1" aria-hidden="true"
@@ -108,12 +110,13 @@
         </div>
       </div>
     </Transition>
+
     <div class="p-4 mx-auto mt-4 bg-white dark:bg-[#374151] rounded-lg" id="chatBox" style="display: block">
       <!-- Chat Box -->
       <div class="h-[200px] bg-gray-200 dark:bg-[#4B5563] rounded-lg">
         <div class="h-full flex flex-col justify-end">
           <!-- Chat messages -->
-          <div class="overflow-y-auto text-black dark:text-white">
+          <div class="overflow-y-auto text-sm md:text-base text-black dark:text-white">
             <!-- Your chat messages go here -->
             <div v-for="(message, index) in messages" :key="index">
               <b>{{ message.sender }}</b>: {{ message.text }}
@@ -130,6 +133,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Twilio, { connect, createLocalTracks, createLocalVideoTrack } from 'twilio-video'
 import { useCallegeStore } from '../stores/callege'

@@ -1,8 +1,8 @@
 <template>
-    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-10">
+    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-5 md:p-10">
         <div class="flex flex-col pb-[30px] justify-center items-center">
-            <h1 class="font-bold text-4xl pb-[30px]">Ada yang bisa kami bantu?</h1>
-            <h2 class="font-bold text-xl">Pertanyaan Paling Sering</h2>
+            <h1 class="font-bold text-xl md:text-2xl lg:text-3xl pb-[30px]">Ada Yang Bisa Kami Bantu?</h1>
+            <h2 class="font-bold text-md md:text-lg lg:text-xl">Pertanyaan Paling Sering</h2>
         </div>
         <div class="flex flex-col pt-[50px]">
             <button class="dropdown-trigger relative font-semibold flex items-center">
@@ -13,7 +13,7 @@
                     <i class="fa-solid fa-square-caret-right" style="color:gray;"></i>
                 </span>
             </button>
-            <div class="dropdown-content hidden pt-[15px]">
+            <div class="dropdown-content hidden text-justify text-sm md:text-base pt-[15px]">
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil natus maiores porro iste corporis sint
                     explicabo rerum quam eos vel, quas similique culpa nostrum ea quos dolore ipsa! Recusandae, libero!</p>
             </div>
@@ -23,12 +23,11 @@
             <button class="dropdown-trigger relative font-semibold flex items-center">
                 <span class="pr-4"><i class="fa-solid fa-circle" style="color: gray;"></i></span>
                 Bagaimana cara bisa berlangganan?
-                <span
-                    class="dropdown-icon absolute top-1/2 right-0 transform -translate-y-1/2 transition-transform duration-300">
+                <span class="dropdown-icon absolute top-1/2 right-0 transform -translate-y-1/2">
                     <i class="fa-solid fa-square-caret-right" style="color:gray;"></i>
                 </span>
             </button>
-            <div class="dropdown-content hidden pt-[15px] transition-transform duration-300">
+            <div class="dropdown-content text-justify text-sm md:text-base hidden pt-[15px]">
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil natus maiores porro iste corporis sint
                     explicabo rerum quam eos vel, quas similique culpa nostrum ea quos dolore ipsa! Recusandae, libero!</p>
             </div>
@@ -43,7 +42,7 @@
                     <i class="fa-solid fa-square-caret-right" style="color:gray;"></i>
                 </span>
             </button>
-            <div class="dropdown-content hidden pt-[15px]">
+            <div class="dropdown-content hidden text-justify text-sm md:text-base pt-[15px]">
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil natus maiores porro iste corporis sint
                     explicabo rerum quam eos vel, quas similique culpa nostrum ea quos dolore ipsa! Recusandae, libero!</p>
             </div>
@@ -58,7 +57,7 @@
                     <i class="fa-solid fa-square-caret-right" style="color:gray;"></i>
                 </span>
             </button>
-            <div class="dropdown-content hidden pt-[15px]">
+            <div class="dropdown-content hidden text-justify text-sm md:text-base pt-[15px]">
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil natus maiores porro iste corporis sint
                     explicabo rerum quam eos vel, quas similique culpa nostrum ea quos dolore ipsa! Recusandae, libero!</p>
             </div>
@@ -66,11 +65,12 @@
         </div>
         <div class="pt-[60px]">
             <div class="flex flex-col pb-[30px] justify-center items-center">
-                <h1 class="font-bold text-xl pb-[15px]">Ada yang bisa kami bantu?</h1>
-                <p>Jika kamu masih belum memiliki jawaban dari FAQ kami, kamu bisa menghubungi kami. Kami akan menjawab
+                <h1 class="font-bold text-md md:text-lg lg:text-xl pb-[15px]">Hubungi Kami</h1>
+                <p class="text-justify">Jika kamu masih belum memiliki jawaban dari FAQ kami, kamu bisa menghubungi kami.
+                    Kami akan menjawab
                     secepatnya!</p>
             </div>
-            <div class="flex flex-wrap justify-center items-center pb-8">
+            <div class="flex flex-wrap justify-center space-y-2 lg:space-y-0 items-center pb-8">
                 <button
                     class="flex flex-col justify-center items-center mr-4 rounded-xl dark:text-gray-800 py-2 px-4 bg-white max-w-[400px] w-full border-2 border-[#D5D0F7] shadow transition hover:scale-105">
                     <span>

@@ -1,28 +1,31 @@
 <template>
-    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-10">
+    <div class="container mx-auto bg-white dark:bg-gray-800 rounded-xl p-5 md:p-10">
         <div class="w-full  bg-white dark:bg-gray-800 rounded-lg  dark:border-gray-700">
             <div class="flex items-center justify-between mb-1">
-                <h5 class="text-3xl font-bold leading-none text-gray-900 dark:text-white">Profil Saya</h5>
+                <h5 class="text-xl md:text-2xl lg:text-3xl font-bold leading-none text-gray-900 dark:text-white">Profil Saya
+                </h5>
             </div>
             <div class="p-5">
-                <div class="flex items-center space-x-5">
+                <div
+                    class="flex flex-col text-center items-center space-y-2 md:space-x-2 md:flex-row md:text-left lg:space-x-5">
                     <div class="flex-shrink-0">
-                        <img class="w-[5rem] aspect-square rounded-full" :src="useCallegeStore().picture" alt="User Avatar">
+                        <img class="w-12 md:w-16 lg:w-20 aspect-square rounded-full" :src="useCallegeStore().picture"
+                            alt="User Avatar">
                     </div>
-                    <div class="flex-1 ps-5 space-y-1 min-w-0  h-full">
-                        <p class="text-lg font-bold text-gray-900 truncate dark:text-white">
+                    <div class="flex-1 md:ps-5 space-y-1 min-w-0  h-full">
+                        <p class="text-base md:text-md lg:text-lg font-bold text-gray-900 truncate dark:text-white">
                             {{ useCallegeStore().name }}
                         </p>
-                        <p class="text-md text-gray-500 truncate dark:text-gray-400 font-bold">
+                        <p class="text-base md:text-md text-gray-500 truncate dark:text-gray-400 font-bold">
                             {{ premiumStatus ? 'Premium User' : 'Free User' }}
                         </p>
                         <p class="text-sm text-gray-500 truncate font-semibold" v-if="premiumStatus">
                             Valid Untill : {{ premiumStatus ? premiumStatus : 'Tidak Aktif' }}
                         </p>
                     </div>
-                    <div class="items-center text-base font-semibold text-gray-900 dark:text-white">
+                    <div class="items-center font-semibold text-gray-900 dark:text-white">
                         <button
-                            class="transition-all border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white text-lg hover:bg-primary hover:text-white focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2  hover:scale-105 active:scale-90"
+                            class="transition-all border-2 border-purple-500 dark:border-[#BF125D] bg-white dark:bg-[#751A3D] text-purple-500 dark:text-white text-base md:text-md lg:text-lg hover:bg-primary hover:text-white focus:ring-4 focus:ring-[#FCC9C9] leading-none font-medium rounded-lg text-md px-12 pt-3 pb-3.5 mr-2 mb-2  hover:scale-105 active:scale-90"
                             @click="openSubscribe">
                             Langganan
                         </button>
@@ -34,7 +37,7 @@
                     <div class="grid gap-y-8 gap-x-10 mb-6 md:grid-cols-2">
                         <div>
                             <label for="nama_panggilan"
-                                class="block mb-4 text-md font-medium text-gray-900 dark:text-white">Nama
+                                class="block mb-4 md:text-base lg:text-md font-medium text-gray-900 dark:text-white">Nama
                                 Panggilan</label>
                             <input type="text" id="nama_panggilan" name="nama_panggilan"
                                 class="bg-white border border-gray-300 text-gray-900 text-md ps-4 py-3 rounded-lg focus:ring-[#D5D0F7] focus:border-[#D5D0F7] block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#D5D0F7] dark:focus:border-[#D5D0F7]"
@@ -156,7 +159,7 @@ const updateProfile = () => {
                 useCallegeStore().gender = gender
                 let res = await useCallegeStore().updateUser();
                 if (res) {
-                    router.push({ name: 'streaming' })
+                    router.push({ name: 'profile' })
                     ElNotification({
                         title: 'Berhasil!',
                         message: 'Berhasil mengubah profile',
